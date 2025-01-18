@@ -1,127 +1,33 @@
 {# templates/keyboard_desktop.html #}
-<!DOCTYPE html>
-<html lang="ru">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Russian Virtual Keyboard (Desktop)</title>
-    <style>
-        /* Desktop-specific styles */
-        body {
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-            font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-        }
+{% block title %}Russian Virtual Keyboard (Desktop){% endblock %}
 
-        .keyboard {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='/keyboard_desktop.css') }}">
+{% endblock %}
 
-        .keyboard-row {
-            display: flex;
-            justify-content: center;
-            margin: 5px 0;
-        }
+{% block content %}
+<textarea class="input-area" placeholder="Your answer:"></textarea>
 
-        .key {
-            min-width: 40px;
-            height: 40px;
-            margin: 3px;
-            padding: 5px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .key:hover {
-            background-color: #f0f0f0;
-        }
-
-        .key:active {
-            background-color: #e0e0e0;
-            transform: translateY(1px);
-        }
-
-        .space-key {
-            width: 200px;
-        }
-
-        .input-area {
-            width: 100%;
-            max-width: 780px;
-            margin: 20px auto;
-            padding: 10px;
-            display: block;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-    </style>
-</head>
-
-<body>
-    <textarea class="input-area" placeholder="Your answer:"></textarea>
-
-    <div class="keyboard">
-        <!-- Desktop keyboard layout -->
-        {% for row_name, keys in russian_layout.items() %}
-        <div class="keyboard-row">
-            {% for key in keys %}
-            <button class="key">{{ key }}</button>
-            {% endfor %}
-        </div>
+<div class="keyboard">
+    {% for row_name, keys in russian_layout.items() %}
+    <div class="keyboard-row">
+        {% for key in keys %}
+        <button class="key">{{ key }}</button>
         {% endfor %}
-
-        <div class="keyboard-row">
-            <button class="key">Shift</button>
-            <button class="space-key">Space</button>
-            <button class="key">←</button>
-            <button class="key">Enter</button>
-        </div>
     </div>
+    {% endfor %}
 
-    <script>
-        // Desktop keyboard functionality
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.querySelector('.input-area');
-            const keys = document.querySelectorAll('.key');
-            let isShiftActive = false;
+    <div class="keyboard-row">
+        <button class="key">Shift</button>
+        <button class="space-key">Space</button>
+        <button class="key">←</button>
+        <button class="key">Enter</button>
+    </div>
+</div>
+{% endblock %}
 
-            keys.forEach(key => {
-                key.addEventListener('click', () => {
-                    const keyText = key.textContent;
-
-                    switch (keyText) {
-                        case 'Shift':
-                            isShiftActive = !isShiftActive;
-                            break;
-                        case 'Space':
-                            input.value += ' ';
-                            break;
-                        case '←':
-                            input.value = input.value.slice(0, -1);
-                            break;
-                        case 'Enter':
-                            input.value += '\n';
-                            break;
-                        default:
-                            input.value += isShiftActive ? keyText.toUpperCase() : keyText;
-                            if (isShiftActive) isShiftActive = false;
-                    }
-                    input.focus();
-                });
-            });
-        });
-    </script>
-</body>
-
-</html>
+{% block scripts %}
+<script src="{{ url_for('static', path='/keyboard_desktop.js') }}"></script>
+{% endblock %}

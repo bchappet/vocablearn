@@ -13,12 +13,13 @@
 
 <p>Your answer:</p>
 
+{% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
 
 <p>Options:</p>
 <ol class="quiz-options">
     <li><a href="/nyi/">Skip word</a></li>
-    <li><a href="{{ url_for('read_root') }}">End quiz</a></li>
     <li><a href="/nyi/">Show group info</a></li>
+    <li><a href="{{ url_for('read_root') }}">End quiz</a></li>
 </ol>
 
 {% endblock %}
