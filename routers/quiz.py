@@ -5,6 +5,7 @@ from fastapi.templating import Jinja2Templates
 from database import SessionDep
 from sqlalchemy import func
 from models.tables import Word, Settings
+from utils.web import is_mobile
 import uuid
 
 router = APIRouter(
@@ -84,6 +85,8 @@ def quiz_question(request: Request, session_id: str):
     
     word = quiz_session["words"][question_id]
     russian_layout = russian_keyboard_layout()
+    user_agent = request.headers.get("user-agent", "")
+    is_mobile_device = is_mobile(user_agent)
     
     return templates.TemplateResponse(
         request=request,
@@ -91,7 +94,8 @@ def quiz_question(request: Request, session_id: str):
         context={"word_to_translate": word["question"],
                  "question_id": question_id,
                  "nb_questions": nb_questions,
-                 "russian_layout": russian_layout}
+                 "russian_layout": russian_layout,
+                 "is_mobile_device": is_mobile_device}
     )
 
 @router.post("/{session_id}/answer", name="quiz_answer")

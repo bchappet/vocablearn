@@ -10,37 +10,19 @@
 <p>Translate:</p>
 <p class="word-to-translate"> {{ word_to_translate }} </p>
 
+
 <p>Your answer:</p>
-<div class="keyboard">
-    <form action="/quiz/{{request.path_params['session_id']}}/answer" method="post" class="quiz-form">
-        <input type="text" name="answer" id="input" class="answer-field" required>
-    </form>
 
-    <div id="keyboard-regular">
-        {% for row_name, keys in russian_layout.items() %}
-        <div class="keyboard-row">
-            {% for key in keys %}
-            <button class="key" data-key="{{ key }}">{{ key }}</button>
-            {% endfor %}
-        </div>
-        {% endfor %}
 
-        <div class="keyboard-row">
-            <button class="key space-key" id="space-key" data-key=" ">Space</button>
-            <button class="key special-key" id="backspace-key">←</button>
-            <button class="key special-key" id="enter-key">Enter ↵</button>
-        </div>
-    </div>
+<p>Options:</p>
+<ol class="quiz-options">
+    <li><a href="/nyi/">Skip word</a></li>
+    <li><a href="{{ url_for('read_root') }}">End quiz</a></li>
+    <li><a href="/nyi/">Show group info</a></li>
+</ol>
 
-    <p>Options:</p>
-    <ol class="quiz-options">
-        <li><a href="/nyi/">Skip word</a></li>
-        <li><a href="{{ url_for('read_root') }}">End quiz</a></li>
-        <li><a href="/nyi/">Show group info</a></li>
-    </ol>
+{% endblock %}
 
-    {% endblock %}
-
-    {% block scripts %}
-    <script src="{{ url_for('static', path='keyboard.js') }}"></script>
-    {% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', path='keyboard.js') }}"></script>
+{% endblock %}

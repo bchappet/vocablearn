@@ -5,14 +5,7 @@
 {% block header %}Quiz Time!{% endblock %}
 
 {% block content %}
-<div class="settings">
-    <h3>Current settings:</h3>
-    <ul>
-        <li>Quiz type: {% if settings.ru_to_en %}Russian → English{% else %}English → Russian{% endif %}</li>
-        <li>Questions per quiz: {{ settings.nb_questions }}</li>
-        <li>Available words: {{ nb_words_available }}</li>
-    </ul>
-</div>
+
 
 <h3>Choose your quiz mode:</h3>
 <ol class="quiz-options">
@@ -24,5 +17,14 @@
     <li><a href="/nyi">Focus Mode (select specific groups)</a></li>
     <li><a href="/">Home</a></li>
 </ol>
+
+<div class="settings">
+    <h3>Current settings:</h3>
+    <ul>
+        <li>Quiz type: {% if settings.ru_to_en %}Russian → English{% else %}English → Russian{% endif %}</li>
+        <li>Questions per quiz: {{ settings.nb_questions }}</li>
+        <li>Available words: {{ nb_words_available }}</li>
+    </ul>
+</div>
 
 {% endblock %}
