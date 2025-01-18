@@ -1,0 +1,200 @@
+{# templates/keyboard_mobile.html #}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Russian Virtual Keyboard (Mobile)</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f1f3f4;
+            font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .input-container {
+            position: relative;
+            padding: 15px;
+        }
+
+        .input-display {
+            width: calc(100% - 30px);
+            min-height: 24px;
+            padding: 15px;
+            font-size: 16px;
+            border: none;
+            border-bottom: 1px solid #e0e0e0;
+            background-color: white;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background-color: #000;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+            margin-left: 1px;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .keyboard {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #e4e7ea;
+            padding: 8px 4px;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .keyboard-row {
+            display: flex;
+            justify-content: center;
+            margin: 4px 0;
+        }
+
+        .key {
+            flex: 1;
+            margin: 3px;
+            padding: 12px 0;
+            text-align: center;
+            font-size: 18px;
+            color: #000000;
+            background: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 0;
+            touch-action: manipulation;
+        }
+
+        .key:active {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .space-key {
+            flex: 4;
+            background-color: #ffffff;
+            border-radius: 4px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .backspace-key {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="input-container">
+        <div class="input-display">
+            <span id="input-text"></span><span class="cursor"></span>
+        </div>
+    </div>
+
+    <div class="keyboard">
+        <!-- <div class="keyboard-row">
+            {% for key in '1234567890' %}
+            <button class="key">{{ key }}</button>
+            {% endfor %}
+        </div> -->
+        <div class="keyboard-row">
+            {% for key in 'йцукенгшщзх' %}
+            <button class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            {% for key in 'фывапролджэ' %}
+            <button class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            {% for key in 'ячсмитьбюё' %}
+            <button class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            <button class="key">?123</button>
+            <button class="key">,</button>
+            <button class="space-key">Русский</button>
+            <button class="key">.</button>
+            <button class="key backspace-key">←</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let inputText = '';
+            const inputDisplay = document.getElementById('input-text');
+
+            // Prevent native keyboard
+            document.addEventListener('touchstart', function (e) {
+                const target = e.target;
+                if (target.tagName !== 'BUTTON') {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Handle key clicks
+            document.querySelectorAll('.key, .space-key').forEach(key => {
+                key.addEventListener('click', function (e) {
+                    const keyContent = this.textContent;
+
+                    switch (keyContent) {
+                        case '←':
+                            // Handle backspace
+                            inputText = inputText.slice(0, -1);
+                            break;
+                        case 'Русский':
+                            // Handle space
+                            inputText += ' ';
+                            break;
+                        case '?123':
+                            // Handle number toggle (you can implement this later)
+                            return;
+                        default:
+                            // Add the character
+                            inputText += keyContent;
+                    }
+
+                    // Update display
+                    inputDisplay.textContent = inputText;
+                });
+            });
+
+            // Prevent scrolling when touching keyboard
+            document.querySelector('.keyboard').addEventListener('touchmove', function (e) {
+                e.preventDefault();
+            }, { passive: false });
+
+            // Optional: Add a way to get the input value
+            window.getInputValue = function () {
+                return inputText;
+            };
+        });
+    </script>
+</body>
+
+</html>
