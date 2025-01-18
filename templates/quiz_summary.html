@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Summary{% endblock %}
+
+{% block header %}Quiz Summary{% endblock %}
+
+{% block content %}
+
+<div class="summary-container">
+    <div class="score-section">
+        <h3>Score</h3>
+        <p class="score">{{ score }}/{{ nb_questions }}</p>
+        <p class="percentage">{{ (score / nb_questions * 100)|round(1) }}%</p>
+    </div>
+
+    <div class="stats-section">
+        <h3>Statistics</h3>
+        <ul class="stats-list">
+            <li>Total Questions: <strong>{{ nb_questions }}</strong></li>
+            <li>Correct Answers: <strong>{{ score }}</strong></li>
+            <li>Incorrect Answers: <strong>{{ nb_questions - score }}</strong></li>
+        </ul>
+    </div>
+
+    <div class="navigation">
+        <a href="/quiz/{{ group_id }}" class="btn btn-primary">Try Again</a>
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

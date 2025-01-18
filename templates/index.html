@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}VocabLearn Pro{% endblock %}
+
+{% block header %}Welcome to VocabLearn Pro!{% endblock %}
+
+{% block content %}
+
+<div class="quiz-options">
+    <h3>Would you like to:</h3>
+    <ol>
+        <li><a href="/quiz">Start a quiz</a></li>
+        <li><a href="/progress">View progress</a></li>
+        <li><a href="/manage">Manage words/groups</a></li>
+        <li><a href="/settings">Settings</a></li>
+    </ol>
+</div>
+
+{% endblock %}

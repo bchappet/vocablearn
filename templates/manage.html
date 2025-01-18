@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Words & Groups - VocabLearn Pro{% endblock %}
+
+{% block header %}Manage Words & Groups{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <h3>Current Groups:</h3>
+    <ol class="group-list">
+        {% for group in groups %}
+        <li class="group-item">
+            <span class="group-name">{{ group['name'] }}</span> ({{ group['word_count'] }} words)
+        </li>
+        {% endfor %}
+    </ol>
+
+    <h3>Options:</h3>
+    <ol class="options-list">
+        <li><a href="{{ url_for('read_manage_add_group') }}">Add new group</a></li>
+        <li>Manage existing group</li>
+        <li>Reorder groups</li>
+        <li>View word details</li>
+        <li><a href="/">Return to main menu</a></li>
+    </ol>
+</div>
+{% endblock %}

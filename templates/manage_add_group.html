@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Add New Group - VocabLearn Pro{% endblock %}
+
+{% block header %}Add new group{% endblock %}
+
+{% block content %}
+<form action="/manage/add_group" method="POST" class="add-group-form">
+    <div class="form-group">
+        <label for="group_name">Group Name:</label>
+        <input type="text" id="group_name" name="group_name" required>
+    </div>
+
+    <div id="words-container">
+        <h3>Add Words</h3>
+        <div class="word-entry">
+            <input type="text" name="english[]" placeholder="English word" required>
+            <input type="text" name="russian[]" placeholder="Russian word" required>
+            <textarea name="mnemonic[]" placeholder="Mnemonic hint (optional)"></textarea>
+        </div>
+    </div>
+
+    <button type="button" onclick="addWordFields()" class="add-word-btn">+ Add another word</button>
+    <button type="submit" class="submit-btn">Create Group</button>
+</form>
+
+<div class="quiz-options">
+    <a href="/manage">Back to Manage Groups</a>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function addWordFields() {
+        const container = document.getElementById('words-container');
+        const newWord = document.createElement('div');
+        newWord.className = 'word-entry';
+        newWord.innerHTML = `
+            <input type="text" name="english[]" placeholder="English word" required>
+            <input type="text" name="russian[]" placeholder="Russian word" required>
+            <textarea name="mnemonic[]" placeholder="Mnemonic hint (optional)"></textarea>
+        `;
+        container.appendChild(newWord);
+    }
+</script>
+{% endblock %}

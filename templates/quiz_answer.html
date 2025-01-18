@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Answer{% endblock %}
+
+{% block header %}Answer Result{% endblock %}
+
+{% block content %}
+<div class="answer-result {% if is_correct %}correct{% else %}incorrect{% endif %}">
+    <p>Your word was: <strong>{{ word }}</strong></p>
+    <p>Your answer: <strong>{{ user_answer }}</strong></p>
+    <p>Correct answer: <strong>{{ correct_answer }}</strong></p>
+</div>
+<script>
+    document.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            window.location.href = '/quiz/{{request.path_params["session_id"]}}/question';
+        }
+    });
+</script>
+{% endblock %}
+
+{% block navigation %}
+<div class="navigation">
+    <a href="/quiz/{{request.path_params['session_id']}}/question" class="btn btn-primary">Next Question</a>
+    <a href="{{ url_for('read_root') }}" class="btn btn-secondary">End Quiz</a>
+</div>
+{% endblock %}
