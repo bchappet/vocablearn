@@ -8,88 +8,41 @@
 {% endblock %}
 
 {% block content %}
-<div class="input-container">
-    <div class="input-display">
-        <span id="input-text"></span><span class="cursor"></span>
+<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}" id="answer-form">
+    <div class="input-container">
+        <div class="input-display">
+            <span id="input-text"></span><span class="cursor"></span>
+        </div>
+        <input type="hidden" name="answer" id="hidden-answer">
     </div>
-</div>
 
-<div class="keyboard">
-    <div class="keyboard-row">
-        {% for key in 'йцукенгшщзх' %}
-        <button class="key">{{ key }}</button>
-        {% endfor %}
+    <div class="keyboard">
+        <div class="keyboard-row">
+            {% for key in 'йцукенгшщзх' %}
+            <button type="button" class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            {% for key in 'фывапролджэ' %}
+            <button type="button" class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            {% for key in 'ячсмитьбюё' %}
+            <button type="button" class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
+        <div class="keyboard-row">
+            <button type="button" class="key">,</button>
+            <button type="button" class="space-key"> </button>
+            <button type="button" class="key">.</button>
+            <button type="button" class="key enter-key">Enter</button>
+            <button type="button" class="key backspace-key">←</button>
+        </div>
     </div>
-    <div class="keyboard-row">
-        {% for key in 'фывапролджэ' %}
-        <button class="key">{{ key }}</button>
-        {% endfor %}
-    </div>
-    <div class="keyboard-row">
-        {% for key in 'ячсмитьбюё' %}
-        <button class="key">{{ key }}</button>
-        {% endfor %}
-    </div>
-    <div class="keyboard-row">
-        <button class="key">?123</button>
-        <button class="key">,</button>
-        <button class="space-key"> </button>
-        <button class="key">.</button>
-        <button class="key backspace-key">←</button>
-    </div>
-</div>
+</form>
 {% endblock %}
 
 {% block scripts %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        let inputText = '';
-        const inputDisplay = document.getElementById('input-text');
-
-        // Prevent native keyboard
-        document.addEventListener('touchstart', function (e) {
-            const target = e.target;
-            if (target.tagName !== 'BUTTON') {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        // Handle key clicks
-        document.querySelectorAll('.key, .space-key').forEach(key => {
-            key.addEventListener('click', function (e) {
-                const keyContent = this.textContent;
-
-                switch (keyContent) {
-                    case '←':
-                        // Handle backspace
-                        inputText = inputText.slice(0, -1);
-                        break;
-                    case 'Русский':
-                        // Handle space
-                        inputText += ' ';
-                        break;
-                    case '?123':
-                        // Handle number toggle (you can implement this later)
-                        return;
-                    default:
-                        // Add the character
-                        inputText += keyContent;
-                }
-
-                // Update display
-                inputDisplay.textContent = inputText;
-            });
-        });
-
-        // Prevent scrolling when touching keyboard
-        document.querySelector('.keyboard').addEventListener('touchmove', function (e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        // Optional: Add a way to get the input value
-        window.getInputValue = function () {
-            return inputText;
-        };
-    });
-</script>
+<script src="{{ url_for('static', path='/keyboard.js') }}"></script>
 {% endblock %}

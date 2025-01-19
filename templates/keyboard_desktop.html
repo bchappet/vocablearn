@@ -8,26 +8,30 @@
 {% endblock %}
 
 {% block content %}
-<textarea class="input-area" placeholder="Your answer:"></textarea>
+<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}"
+    id="answer-form">
+    <textarea class="input-area" placeholder="Your answer:"></textarea>
+    <input type="hidden" name="answer" id="hidden-answer">
 
-<div class="keyboard">
-    {% for row_name, keys in russian_layout.items() %}
-    <div class="keyboard-row">
-        {% for key in keys %}
-        <button class="key">{{ key }}</button>
+    <div class="keyboard">
+        {% for row_name, keys in russian_layout.items() %}
+        <div class="keyboard-row">
+            {% for key in keys %}
+            <button type="button" class="key">{{ key }}</button>
+            {% endfor %}
+        </div>
         {% endfor %}
-    </div>
-    {% endfor %}
 
-    <div class="keyboard-row">
-        <button class="key">Shift</button>
-        <button class="space-key">Space</button>
-        <button class="key">←</button>
-        <button class="key">Enter</button>
+        <div class="keyboard-row">
+            <button type="button" class="key">Shift</button>
+            <button type="button" class="space-key">Space</button>
+            <button type="button" class="key">←</button>
+            <button type="button" class="key">Enter</button>
+        </div>
     </div>
-</div>
+</form>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', path='/keyboard_desktop.js') }}"></script>
+<script src="{{ url_for('static', path='/keyboard.js') }}"></script>
 {% endblock %}

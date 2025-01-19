@@ -27,19 +27,12 @@ async def read_keyboard(request: Request) -> HTMLResponse:
         'row4': ['я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.']
     }
     
-    russian_shift_layout = {
-        'row1': ['Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+'],
-        'row2': ['Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ'],
-        'row3': ['Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э'],
-        'row4': ['Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',']
-    }
     
     template_name = "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html"
     return templates.TemplateResponse(
         template_name,
         {
             "request": request,
-            "russian_layout": russian_layout,
-            "russian_shift_layout": russian_shift_layout
+            "russian_layout": russian_layout
         }
     )
