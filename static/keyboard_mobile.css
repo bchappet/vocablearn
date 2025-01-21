@@ -1,15 +1,16 @@
 body {
-    margin: 0;
-    padding: 0;
     background-color: #f1f3f4;
     font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
     height: 100vh;
     overflow: hidden;
+    padding-left: 10px;
+    border-left-width: 10px;
+    margin-left: 10px;
 }
 
 .input-container {
     position: relative;
-    padding: 15px;
+    padding: 2px;
 }
 
 .input-display {

@@ -5,21 +5,23 @@
 {% block header %}Global Quiz{% endblock %}
 
 {% block content %}
-<p>Question {{ question_id }}/{{ nb_questions }}</p>
+<div class="quiz-container">
+    <div class="progress-bar">
+        <span class="progress-text">Question {{ question_id }}/{{ nb_questions }}</span>
+    </div>
+    <div class="quiz-options">
+        <a href="/nyi/" class="quiz-option">Skip</a>
+        <a href="/nyi/" class="quiz-option">Info</a>
+        <a href="{{ url_for('read_root') }}" class="quiz-option">End</a>
+    </div>
+    <div class="question-section">
+        <div class="question-label">Translate:</div>
+        <div class="word-to-translate">{{ word_to_translate }}</div>
+    </div>
 
-<p>Translate:</p>
-<p class="word-to-translate"> {{ word_to_translate }} </p>
-
-
-<p>Your answer:</p>
-
-{% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
-
-<p>Options:</p>
-<ol class="quiz-options">
-    <li><a href="/nyi/">Skip word</a></li>
-    <li><a href="/nyi/">Show group info</a></li>
-    <li><a href="{{ url_for('read_root') }}">End quiz</a></li>
-</ol>
-
+    <div class="answer-section">
+        <div class="answer-label">Your answer:</div>
+        {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
+    </div>
+</div>
 {% endblock %}

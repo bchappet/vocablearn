@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    
+
     if (isMobile) {
         initMobileKeyboard();
     } else {
@@ -51,7 +51,8 @@ function initMobileKeyboard() {
     const hiddenInput = document.getElementById('hidden-answer');
 
     document.addEventListener('touchstart', function (e) {
-        if (e.target.tagName !== 'BUTTON') {
+        // Allow both buttons and links to work
+        if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'A') {
             e.preventDefault();
         }
     }, { passive: false });

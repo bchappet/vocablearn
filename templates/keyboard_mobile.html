@@ -8,7 +8,8 @@
 {% endblock %}
 
 {% block content %}
-<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}" id="answer-form">
+<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}"
+    id="answer-form">
     <div class="input-container">
         <div class="input-display">
             <span id="input-text"></span><span class="cursor"></span>
@@ -34,7 +35,7 @@
         </div>
         <div class="keyboard-row">
             <button type="button" class="key">,</button>
-            <button type="button" class="space-key"> </button>
+            <button type="button" class="key space-key"> </button>
             <button type="button" class="key">.</button>
             <button type="button" class="key enter-key">Enter</button>
             <button type="button" class="key backspace-key">←</button>
