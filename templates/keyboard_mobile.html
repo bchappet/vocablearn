@@ -1,49 +1,56 @@
 {# templates/keyboard_mobile.html #}
-{% extends "base.html" %}
 
-{% block title %}Russian Virtual Keyboard (Mobile){% endblock %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', path='/keyboard_mobile.css') }}">
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VocabLearn Pro{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/keyboard_mobile.css') }}">
 
-{% block content %}
-<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}"
-    id="answer-form">
-    <div class="input-container">
-        <div class="input-display">
-            <span id="input-text"></span><span class="cursor"></span>
-        </div>
-        <input type="hidden" name="answer" id="hidden-answer">
-    </div>
+</head>
 
-    <div class="keyboard">
-        <div class="keyboard-row">
-            {% for key in 'йцукенгшщзх' %}
-            <button type="button" class="key">{{ key }}</button>
-            {% endfor %}
-        </div>
-        <div class="keyboard-row">
-            {% for key in 'фывапролджэ' %}
-            <button type="button" class="key">{{ key }}</button>
-            {% endfor %}
-        </div>
-        <div class="keyboard-row">
-            {% for key in 'ячсмитьбюё' %}
-            <button type="button" class="key">{{ key }}</button>
-            {% endfor %}
-        </div>
-        <div class="keyboard-row">
-            <button type="button" class="key">,</button>
-            <button type="button" class="key space-key"> </button>
-            <button type="button" class="key">.</button>
-            <button type="button" class="key enter-key">Enter</button>
-            <button type="button" class="key backspace-key">←</button>
-        </div>
-    </div>
-</form>
-{% endblock %}
+<body>
 
-{% block scripts %}
-<script src="{{ url_for('static', path='/keyboard.js') }}"></script>
-{% endblock %}
+    <form method="{{'POST' if request.path_params.get('session_id') else 'GET'}}"
+        action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) if request.path_params.get('session_id') else url_for('read_root') }}"
+        id="answer-form">
+        <div class="input-container">
+            <div class="input-display">
+                <span id="input-text"></span><span class="cursor"></span>
+            </div>
+            <input type="hidden" name="answer" id="hidden-answer">
+        </div>
+
+        <div class="keyboard">
+            <div class="keyboard-row">
+                {% for key in 'йцукенгшщзх' %}
+                <button type="button" class="key">{{ key }}</button>
+                {% endfor %}
+            </div>
+            <div class="keyboard-row">
+                {% for key in 'фывапролджэ' %}
+                <button type="button" class="key">{{ key }}</button>
+                {% endfor %}
+            </div>
+            <div class="keyboard-row">
+                {% for key in 'ячсмитьбюё' %}
+                <button type="button" class="key">{{ key }}</button>
+                {% endfor %}
+            </div>
+            <div class="keyboard-row">
+                <button type="button" class="key">,</button>
+                <button type="button" class="key space-key"> </button>
+                <button type="button" class="key">.</button>
+                <button type="button" class="key enter-key">Enter</button>
+                <button type="button" class="key backspace-key">←</button>
+            </div>
+        </div>
+    </form>
+
+    <script src="{{ url_for('static', path='/keyboard.js') }}"></script>
+
+</body>
+
+</html>

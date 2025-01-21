@@ -1,12 +1,4 @@
-body {
-    background-color: #f1f3f4;
-    font-family: -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
-    height: 100vh;
-    overflow: hidden;
-    padding-left: 10px;
-    border-left-width: 10px;
-    margin-left: 10px;
-}
+@import url('style.css');
 
 .input-container {
     position: relative;
@@ -36,8 +28,15 @@ body {
 }
 
 @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
 }
 
 .keyboard {

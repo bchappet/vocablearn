@@ -1,37 +1,44 @@
 {# templates/keyboard_desktop.html #}
-{% extends "base.html" %}
 
-{% block title %}Russian Virtual Keyboard (Desktop){% endblock %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('static', path='/keyboard_desktop.css') }}">
-{% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VocabLearn Pro{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/keyboard_desktop.css') }}">
 
-{% block content %}
-<form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params['session_id']) }}"
-    id="answer-form">
-    <textarea class="input-area" placeholder="Your answer:"></textarea>
-    <input type="hidden" name="answer" id="hidden-answer">
+</head>
 
-    <div class="keyboard">
-        {% for row_name, keys in russian_layout.items() %}
-        <div class="keyboard-row">
-            {% for key in keys %}
-            <button type="button" class="key">{{ key }}</button>
+<body>
+    <form method="{{'POST' if request.path_params.get('session_id') else 'GET'}}"
+        action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) if request.path_params.get('session_id') else url_for('read_root') }}"
+        id="answer-form">
+        <textarea class="input-area" placeholder="Your answer:"></textarea>
+        <input type="hidden" name="answer" id="hidden-answer">
+
+        <div class="keyboard">
+            {% for row_name, keys in russian_layout.items() %}
+            <div class="keyboard-row">
+                {% for key in keys %}
+                <button type="button" class="key">{{ key }}</button>
+                {% endfor %}
+            </div>
             {% endfor %}
-        </div>
-        {% endfor %}
 
-        <div class="keyboard-row">
-            <button type="button" class="key">Shift</button>
-            <button type="button" class="space-key">Space</button>
-            <button type="button" class="key">←</button>
-            <button type="button" class="key">Enter</button>
+            <div class="keyboard-row">
+                <button type="button" class="key">Shift</button>
+                <button type="button" class="space-key">Space</button>
+                <button type="button" class="key">←</button>
+                <button type="button" class="key">Enter</button>
+            </div>
         </div>
-    </div>
-</form>
-{% endblock %}
+    </form>
 
-{% block scripts %}
-<script src="{{ url_for('static', path='/keyboard.js') }}"></script>
-{% endblock %}
+
+    <script src="{{ url_for('static', path='/keyboard.js') }}"></script>
+
+</body>
+
+</html>
