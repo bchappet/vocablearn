@@ -76,7 +76,7 @@ async def create_quiz_session(db: SessionDep):
 
 
 @router.get("/{session_id}/question", name="quiz_question", response_class=HTMLResponse)
-def quiz_question(request: Request, session_id: str):
+def quiz_question(request: Request, session_id: str, db: SessionDep):
     quiz_session = sessions.get(session_id)
     if not quiz_session:
         return RedirectResponse("/quiz", status_code=303)
@@ -90,6 +90,8 @@ def quiz_question(request: Request, session_id: str):
     user_agent = request.headers.get("user-agent", "")
     is_mobile_device = is_mobile(user_agent)
     
+    settings = db.query(Settings).first()
+    
     return templates.TemplateResponse(
         request=request,
         name="quiz_question.html",
@@ -97,7 +99,8 @@ def quiz_question(request: Request, session_id: str):
                  "question_id": question_id,
                  "nb_questions": nb_questions,
                  "russian_layout": russian_layout,
-                 "is_mobile_device": is_mobile_device}
+                 "is_mobile_device": is_mobile_device,
+                 "ru_to_en": settings.ru_to_en}
     )
 
 @router.post("/{session_id}/answer", name="quiz_answer")

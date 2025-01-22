@@ -21,7 +21,13 @@
 
     <div class="answer-section">
         <div class="answer-label">Your answer:</div>
-        {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
+        {% if not ru_to_en %}
+            {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
+        {% else %}
+            <form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) }}" id="answer-form">
+                <input type="text" name="answer" class="text-input" autocomplete="off">
+            </form>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
