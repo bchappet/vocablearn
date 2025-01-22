@@ -1,5 +1,6 @@
 import csv
 import argparse
+from pathlib import Path
 from .database import engine
 from sqlmodel import Session, SQLModel
 from models.tables import Group, Word
@@ -46,10 +47,28 @@ def populate_from_csv(csv_path: str, erase_first: bool = False):
             
             session.commit()
 
+def populate_all_csvs(csv_dir: str, erase_first: bool = False):
+    if erase_first:
+        SQLModel.metadata.drop_all(engine)
+        SQLModel.metadata.create_all(engine)
+    
+    csv_path = Path(csv_dir)
+    if not csv_path.is_dir():
+        raise ValueError(f"Directory not found: {csv_dir}")
+    
+    for csv_file in csv_path.glob("*.csv"):
+        populate_from_csv(str(csv_file), erase_first=False)
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Populate database from CSV file')
-    parser.add_argument('--csv_path', default="words.csv", help='Path to the CSV file')
+    parser = argparse.ArgumentParser(description='Populate database from CSV files')
+    parser.add_argument('--csv_path', help='Path to a single CSV file')
+    parser.add_argument('--csv_dir', help='Path to directory containing CSV files')
     parser.add_argument('--erase', action='store_true', help='Erase database before populating')
     args = parser.parse_args()
     
-    populate_from_csv(args.csv_path, args.erase)
+    if args.csv_dir:
+        populate_all_csvs(args.csv_dir, args.erase)
+    elif args.csv_path:
+        populate_from_csv(args.csv_path, args.erase)
+    else:
+        print("Please provide either --csv_path or --csv_dir")
