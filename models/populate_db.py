@@ -3,13 +3,22 @@ import argparse
 from pathlib import Path
 from .database import engine
 from sqlmodel import Session, SQLModel
-from models.tables import Group, Word
+from models.tables import Group, Word, Settings
+
+def erase_database():
+    """Erase and recreate all tables, then add default settings."""
+    SQLModel.metadata.drop_all(engine)
+    SQLModel.metadata.create_all(engine)
+    
+    # Add default settings
+    with Session(engine) as session:
+        default_settings = Settings()
+        session.add(default_settings)
+        session.commit()
 
 def populate_from_csv(csv_path: str, erase_first: bool = False):
     if erase_first:
-        # Drop all tables and recreate them
-        SQLModel.metadata.drop_all(engine)
-        SQLModel.metadata.create_all(engine)
+        erase_database()
     
     with Session(engine) as session:
         with open(csv_path, 'r', encoding='utf-8') as file:
@@ -49,8 +58,7 @@ def populate_from_csv(csv_path: str, erase_first: bool = False):
 
 def populate_all_csvs(csv_dir: str, erase_first: bool = False):
     if erase_first:
-        SQLModel.metadata.drop_all(engine)
-        SQLModel.metadata.create_all(engine)
+        erase_database()
     
     csv_path = Path(csv_dir)
     if not csv_path.is_dir():
