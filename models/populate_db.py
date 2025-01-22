@@ -1,6 +1,6 @@
 import csv
 import argparse
-from database import engine
+from .database import engine
 from sqlmodel import Session, SQLModel
 from models.tables import Group, Word
 

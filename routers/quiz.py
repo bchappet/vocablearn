@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from database import SessionDep
+from models.database import SessionDep
 from sqlalchemy import func
 from models.tables import Word, Settings
 from utils.web import is_mobile
@@ -59,6 +59,8 @@ def read_quiz(request: Request, db: SessionDep):
 async def create_quiz_session(db: SessionDep):
     settings = db.query(Settings).first()
     session_id = str(uuid.uuid4())
+    if not settings:
+        return RedirectResponse("/manage/", status_code=303)
     words = choose_next_words(db, settings.nb_questions)
     quiz_session = {
         "session_id": session_id,

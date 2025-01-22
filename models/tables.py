@@ -20,4 +20,4 @@ class Word(SQLModel, table=True):
 class Settings(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     ru_to_en: bool = Field(default=False)
-    nb_questions: int
+    nb_questions: int = Field(default=5)

@@ -2,8 +2,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from routers import group_management, quiz, settings,keyboard
-from database import create_db_and_tables
+from routers import group_management, quiz, settings, keyboard, database_management
+from models.database import create_db_and_tables
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -21,6 +21,7 @@ app.include_router(group_management.router)
 app.include_router(quiz.router)
 app.include_router(settings.router)
 app.include_router(keyboard.router)
+app.include_router(database_management.router)
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):

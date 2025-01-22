@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from typing import List, Optional
 from models.tables import Group, Word
-from database import SessionDep
+from models.database import SessionDep
 from sqlmodel import select, func
 
 class WordEntry(BaseModel):
