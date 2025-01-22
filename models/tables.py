@@ -14,6 +14,7 @@ class Word(SQLModel, table=True):
     russian: str = Field(index=True)
     group_id: int = Field(foreign_key="group.id")
     mnemonic: str | None = None
+    mastery: float = Field(default=0.0)  # Add mastery field with default 0.0
     
     group: Group = Relationship(back_populates="words")
 

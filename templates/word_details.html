@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Word Details - VocabLearn Pro{% endblock %}
+
+{% block header %}Word Details{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="word-filters">
+        <label for="group-filter">Filter by group:</label>
+        <select id="group-filter" onchange="filterWords()">
+            <option value="all">All Groups</option>
+            {% for group in groups %}
+            <option value="{{ group.id }}">{{ group.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <table class="word-table">
+        <thead>
+            <tr>
+                <th>Group</th>
+                <th>English</th>
+                <th>Russian</th>
+                <th>Mnemonic</th>
+                <th>Mastery</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in words %}
+            <tr data-group-id="{{ word.group_id }}">
+                <td>{{ word.group_name }}</td>
+                <td>{{ word.english }}</td>
+                <td>{{ word.russian }}</td>
+                <td>{{ word.mnemonic }}</td>
+                <td>{{ "%.1f"|format(word.mastery * 100) if word.mastery is not none else "0.0" }}%</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="navigation">
+        <a href="{{ url_for('read_manage') }}" class="btn">Back to Management</a>
+    </div>
+</div>
+
+<script>
+function filterWords() {
+    const groupId = document.getElementById('group-filter').value;
+    const rows = document.querySelectorAll('.word-table tbody tr');
+    
+    rows.forEach(row => {
+        if (groupId === 'all' || row.dataset.groupId === groupId) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+</script>
+{% endblock %}

@@ -86,3 +86,41 @@ async def create_group(request: Request, session: SessionDep):
     
     session.commit()
     return RedirectResponse(url="/manage", status_code=303)
+
+@router.get("/word_details", response_class=HTMLResponse)
+def read_word_details(request: Request, session: SessionDep):
+    # Query to get all words with their group names
+    statement = (
+        select(
+            Word,
+            Group.name.label("group_name")
+        )
+        .join(Group)
+        .order_by(Group.name, Word.english)
+    )
+    results = session.exec(statement).all()
+    
+    # Query to get all groups for the filter
+    groups = session.exec(select(Group)).all()
+    
+    # Prepare word data
+    words_data = [
+        {
+            "group_id": str(word.group_id),
+            "group_name": group_name,
+            "english": word.english,
+            "russian": word.russian,
+            "mnemonic": word.mnemonic,
+            "mastery": word.mastery
+        }
+        for word, group_name in results
+    ]
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="word_details.html",
+        context={
+            "words": words_data,
+            "groups": groups
+        }
+    )
