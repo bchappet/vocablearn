@@ -6,5 +6,5 @@ router = APIRouter()
 
 @router.get("/reset_database")
 async def reset_database(request: Request):
-    populate_from_csv(csv_path="models/words.csv", erase_first=True)
+    populate_from_csv(csv_path="models/words_csv/words.csv", erase_first=True)
     return RedirectResponse(url="/", status_code=303)
