@@ -12,7 +12,7 @@
     <div class="quiz-options">
         <a href="/nyi/" class="quiz-option">Skip</a>
         <a href="/nyi/" class="quiz-option">Info</a>
-        <a href="{{ url_for('read_root') }}" class="quiz-option">End</a>
+        <a href="/quiz/{{request.path_params['session_id']}}/summary" class="quiz-option">End</a>
     </div>
     <div class="question-section">
         <div class="question-label">Translate:</div>
@@ -22,11 +22,13 @@
     <div class="answer-section">
         <div class="answer-label">Your answer:</div>
         {% if not ru_to_en %}
-            {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
+        {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
         {% else %}
-            <form method="POST" action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) }}" id="answer-form">
-                <input type="text" name="answer" class="text-input" autocomplete="off">
-            </form>
+        <form method="POST"
+            action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) }}"
+            id="answer-form">
+            <input type="text" name="answer" class="text-input" autocomplete="off">
+        </form>
         {% endif %}
     </div>
 </div>
