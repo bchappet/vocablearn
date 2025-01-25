@@ -4,10 +4,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from models.database import SessionDep
 from sqlalchemy import func
-from models.tables import Word, Settings
-from utils.web import is_mobile
+from models.tables import Word, Settings, WordProgress
 from utils.web import is_mobile, russian_keyboard_layout
 import uuid
+from datetime import datetime
 
 router = APIRouter(
     prefix="/quiz",
@@ -57,12 +57,12 @@ async def create_quiz_session(db: SessionDep):
         "words": words,
         "answers": [],
         "score": 0,
+        "start_time": datetime.utcnow()  # Add start time for response time tracking
     }
     sessions[session_id] = quiz_session
     
     # Redirect to first question
     return RedirectResponse(f"/quiz/{session_id}/question", status_code=303)
-
 
 @router.get("/{session_id}/question", name="quiz_question", response_class=HTMLResponse)
 def quiz_question(request: Request, session_id: str, db: SessionDep):
@@ -93,7 +93,7 @@ def quiz_question(request: Request, session_id: str, db: SessionDep):
     )
 
 @router.post("/{session_id}/answer", name="quiz_answer")
-async def submit_answer(session_id: str, request: Request):
+async def submit_answer(session_id: str, request: Request, db: SessionDep):
     quiz_session = sessions.get(session_id)
     if not quiz_session:
         return RedirectResponse("/quiz", status_code=303)
@@ -104,12 +104,41 @@ async def submit_answer(session_id: str, request: Request):
     question_id = quiz_session["question_id"]
     word = quiz_session["words"][question_id]
     correct_answer = word["answer"]
+    is_correct = user_answer == correct_answer
     
-    if user_answer == correct_answer:
+    # Calculate response time
+    end_time = datetime.utcnow()
+    response_time = (end_time - quiz_session["start_time"]).total_seconds()
+    
+    # Update word progress in database
+    settings = db.query(Settings).first()
+    word_obj = (
+        db.query(Word)
+        .filter(
+            Word.english == (word["question"] if settings.ru_to_en else word["answer"]),
+            Word.russian == (word["answer"] if settings.ru_to_en else word["question"])
+        )
+        .first()
+    )
+    
+    if word_obj:
+        progress = WordProgress(
+            word_id=word_obj.id,
+            correct=is_correct,
+            response_time=response_time,
+            ru_to_en=settings.ru_to_en
+        )
+        db.add(progress)
+        db.commit()
+    
+    # Update session
+    if is_correct:
         quiz_session["score"] += 1
     
     quiz_session["question_id"] += 1
     quiz_session["answers"].append(user_answer)
+    quiz_session["start_time"] = datetime.utcnow()  # Reset start time for next question
+    
     return RedirectResponse(f"/quiz/{session_id}/answer", status_code=303)
 
 @router.get("/{session_id}/answer", name="quiz_answer", response_class=HTMLResponse)

@@ -1,5 +1,6 @@
 from typing import List
 from sqlmodel import Field, SQLModel, Relationship
+from datetime import datetime
 
 class Group(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -14,9 +15,20 @@ class Word(SQLModel, table=True):
     russian: str = Field(index=True)
     group_id: int = Field(foreign_key="group.id")
     mnemonic: str | None = None
-    mastery: float = Field(default=0.0)  # Add mastery field with default 0.0
+    mastery: float = Field(default=0.0)
     
     group: Group = Relationship(back_populates="words")
+    progress: List["WordProgress"] = Relationship(back_populates="word")
+
+class WordProgress(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    word_id: int = Field(foreign_key="word.id")
+    timestamp: datetime = Field(default_factory=datetime.utcnow)
+    ru_to_en: bool
+    correct: bool
+    response_time: float  # in seconds
+    
+    word: Word = Relationship(back_populates="progress")
 
 class Settings(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
