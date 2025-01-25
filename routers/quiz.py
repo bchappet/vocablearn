@@ -6,6 +6,7 @@ from models.database import SessionDep
 from sqlalchemy import func
 from models.tables import Word, Settings
 from utils.web import is_mobile
+from utils.web import is_mobile, russian_keyboard_layout
 import uuid
 
 router = APIRouter(
@@ -17,18 +18,6 @@ templates = Jinja2Templates(directory="templates")
 
 # In-memory session storage (replace with database in production)
 sessions: Dict[str, dict] = {}
-
-def russian_keyboard_layout() -> Dict[str, List[str]]:
-    """
-    Returns a Russian keyboard layout.
-    """
-    russian_layout = {
-        'row1': ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '='],
-        'row2': ['й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ'],
-        'row3': ['ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э'],
-        'row4': ['я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.']
-    }   
-    return russian_layout
 
 def choose_next_words(db: SessionDep, nb_words_to_choose: int) -> List[dict]:
     """
