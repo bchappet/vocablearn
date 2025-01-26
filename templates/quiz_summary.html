@@ -22,6 +22,27 @@
         </ul>
     </div>
 
+    <div class="word-progress-section">
+        <h3>Word Progress</h3>
+        <div class="word-progress-list">
+            {% for word in word_progress %}
+            <div class="word-progress-item {% if word.is_correct %}correct{% else %}incorrect{% endif %}">
+                <div class="word-details">
+                    <span class="question">{{ word.word }}</span>
+                    <span class="answer">{{ word.correct_answer }}</span>
+                    {% if not word.is_correct %}
+                    <span class="user-answer">Your answer: {{ word.user_answer }}</span>
+                    {% endif %}
+                </div>
+                <div class="word-stats">
+                    <span class="success-rate">Success rate: {{ word.success_rate }}%</span>
+                    <span class="attempts">Total attempts: {{ word.attempts }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
     <div class="navigation">
         <a href="/quiz/{{ group_id }}" class="btn btn-primary">Try Again</a>
         <a href="/" class="btn btn-secondary">Back to Home</a>

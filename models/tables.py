@@ -16,6 +16,8 @@ class Word(SQLModel, table=True):
     group_id: int = Field(foreign_key="group.id")
     mnemonic: str | None = None
     mastery: float = Field(default=0.0)
+    success_count: int = Field(default=0)
+    attempt_count: int = Field(default=0)
     
     group: Group = Relationship(back_populates="words")
     progress: List["WordProgress"] = Relationship(back_populates="word")
