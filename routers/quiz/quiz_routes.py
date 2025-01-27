@@ -94,17 +94,18 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
         return RedirectResponse("/quiz", status_code=303)
     
     previous_question = quiz_session["question_id"] - 1
-    last_word = quiz_session["words"][previous_question]
+    last_word: Word = quiz_session["words"][previous_question]
     last_answer = quiz_session["answers"][previous_question]
+    settings = db.query(Settings).first()
     
     return templates.TemplateResponse(
         request=request,
         name="quiz_answer.html",
         context={
-            "word": last_word["question"],
+            "word": last_word.question,
             "user_answer": last_answer,
-            "correct_answer": last_word["answer"],
-            "is_correct": last_answer == last_word["answer"],
+            "correct_answer": last_word.answer if settings.ru_to_en else last_word.russian,
+            "is_correct": last_answer == (last_word.answer if settings.ru_to_en else last_word.russian),
             "success_count": last_word.success_count,
             "attempt_count": last_word.attempt_count,
         }
