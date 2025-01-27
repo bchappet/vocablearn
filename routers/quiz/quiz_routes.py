@@ -84,7 +84,7 @@ async def submit_answer(session_id: str, request: Request, db: SessionDep):
     return RedirectResponse(f"/quiz/{session_id}/answer", status_code=303)
 
 @router.get("/{session_id}/answer", name="quiz_answer", response_class=HTMLResponse)
-def quiz_answer(request: Request, session_id: str):
+def quiz_answer(request: Request, session_id: str, db: SessionDep):
     """
     This function is called when the user submits an answer to a quiz question.
     It displays the user's answer and the correct answer for the previous question.
@@ -94,20 +94,19 @@ def quiz_answer(request: Request, session_id: str):
         return RedirectResponse("/quiz", status_code=303)
     
     previous_question = quiz_session["question_id"] - 1
-    word = quiz_session["words"][previous_question]
+    last_word = quiz_session["words"][previous_question]
     last_answer = quiz_session["answers"][previous_question]
     
     return templates.TemplateResponse(
         request=request,
         name="quiz_answer.html",
         context={
-            "word": word["question"],
+            "word": last_word["question"],
             "user_answer": last_answer,
-            "correct_answer": word["answer"],
-            "is_correct": last_answer == word["answer"],
-            word = db.query(Word).filter(Word.id == word["id"]).first()
-            "success_count": word.success_count,
-            "attempt_count": word.attempt_count,
+            "correct_answer": last_word["answer"],
+            "is_correct": last_answer == last_word["answer"],
+            "success_count": last_word.success_count,
+            "attempt_count": last_word.attempt_count,
         }
     )
 
