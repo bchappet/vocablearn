@@ -85,6 +85,10 @@ async def submit_answer(session_id: str, request: Request, db: SessionDep):
 
 @router.get("/{session_id}/answer", name="quiz_answer", response_class=HTMLResponse)
 def quiz_answer(request: Request, session_id: str):
+    """
+    This function is called when the user submits an answer to a quiz question.
+    It displays the user's answer and the correct answer for the previous question.
+    """
     quiz_session = session_manager.get_session(session_id)
     if not quiz_session:
         return RedirectResponse("/quiz", status_code=303)
@@ -100,7 +104,9 @@ def quiz_answer(request: Request, session_id: str):
             "word": word["question"],
             "user_answer": last_answer,
             "correct_answer": word["answer"],
-            "is_correct": last_answer == word["answer"]
+            "is_correct": last_answer == word["answer"],
+            "success_count": quiz_session["success_count"],
+            "attempt_count": quiz_session["attempt_count"],
         }
     )
 
