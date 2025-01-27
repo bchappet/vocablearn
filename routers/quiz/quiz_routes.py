@@ -49,12 +49,13 @@ def quiz_question(request: Request, session_id: str, db: SessionDep):
     
     word = quiz_session["words"][question_id]
     settings = db.query(Settings).first()
+    question = word.english if settings.ru_to_en else word.russian
     
     return templates.TemplateResponse(
         request=request,
         name="quiz_question.html",
         context={
-            "word_to_translate": word["question"],
+            "word_to_translate": question,
             "question_id": question_id,
             "nb_questions": nb_questions,
             "russian_layout": russian_keyboard_layout(),
@@ -97,15 +98,18 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
     last_word: Word = quiz_session["words"][previous_question]
     last_answer = quiz_session["answers"][previous_question]
     settings = db.query(Settings).first()
+    ru_to_en = settings.ru_to_en
+    question = last_word.english if ru_to_en else last_word.russian
+    correct_answer = last_word.russian if ru_to_en else last_word.english
     
     return templates.TemplateResponse(
         request=request,
         name="quiz_answer.html",
         context={
-            "word": last_word.question,
+            "word": question,
             "user_answer": last_answer,
-            "correct_answer": last_word.answer if settings.ru_to_en else last_word.russian,
-            "is_correct": last_answer == (last_word.answer if settings.ru_to_en else last_word.russian),
+            "correct_answer": correct_answer,
+            "is_correct": last_answer == correct_answer,
             "success_count": last_word.success_count,
             "attempt_count": last_word.attempt_count,
         }
