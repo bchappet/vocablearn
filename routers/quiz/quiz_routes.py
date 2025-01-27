@@ -105,8 +105,9 @@ def quiz_answer(request: Request, session_id: str):
             "user_answer": last_answer,
             "correct_answer": word["answer"],
             "is_correct": last_answer == word["answer"],
-            "success_count": quiz_session["success_count"],
-            "attempt_count": quiz_session["attempt_count"],
+            word = db.query(Word).filter(Word.id == word["id"]).first()
+            "success_count": word.success_count,
+            "attempt_count": word.attempt_count,
         }
     )
 
