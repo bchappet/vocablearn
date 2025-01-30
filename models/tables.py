@@ -11,8 +11,8 @@ class Group(SQLModel, table=True):
 
 class Word(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
-    english: str = Field(index=True)
-    russian: str = Field(index=True)
+    primary_text: str = Field(index=True)  # For now it is english
+    secondary_text: str = Field(index=True)  # For now it is russian
     group_id: int = Field(foreign_key="group.id")
     mnemonic: str | None = None
     mastery: float = Field(default=0.0)
@@ -26,13 +26,9 @@ class WordProgress(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     word_id: int = Field(foreign_key="word.id")
     timestamp: datetime = Field(default_factory=datetime.utcnow)
-    ru_to_en: bool
+    primary_to_secondary: bool
     correct: bool
     response_time: float  # in seconds
     
     word: Word = Relationship(back_populates="progress")
 
-class Settings(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    ru_to_en: bool = Field(default=False)
-    nb_questions: int = Field(default=5)

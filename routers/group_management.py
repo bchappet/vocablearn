@@ -96,7 +96,7 @@ def read_word_details(request: Request, session: SessionDep):
             Group.name.label("group_name")
         )
         .join(Group)
-        .order_by(Group.name, Word.english)
+        .order_by(Group.name, Word.primary_text)
     )
     results = session.exec(statement).all()
     
@@ -108,8 +108,8 @@ def read_word_details(request: Request, session: SessionDep):
         {
             "group_id": str(word.group_id),
             "group_name": group_name,
-            "english": word.english,
-            "russian": word.russian,
+            "primary_text": word.primary_text,
+            "secondary_text": word.secondary_text,
             "mnemonic": word.mnemonic,
             "mastery": word.mastery
         }

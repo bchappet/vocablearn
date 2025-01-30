@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz Time{% endblock %}
+
+{% block header %}Quiz Time!{% endblock %}
+
+{% block content %}
+
+<div class="quiz-setup">
+    <form action="/quiz/session" method="post">
+        <div class="form-group">
+            <label class="d-block mb-3">Quiz Direction:</label>
+            <div class="direction-options">
+                <div class="form-check">
+                    <div class="direction-container">
+                        <input class="form-check-input" type="radio" name="direction" id="secondary_to_primary"
+                            value="secondary_to_primary" checked>
+                        <span class="direction-flags">🇷🇺 → 🇬🇧</span>
+                        <label class="form-check-label" for="secondary_to_primary">
+                            Show me Russian words, I'll answer in English
+                        </label>
+                    </div>
+                </div>
+                <div class="form-check mb-2"></div>
+                    <div class="direction-container">
+                        <input class="form-check-input" type="radio" name="direction" id="primary_to_secondary"
+                            value="primary_to_secondary">
+                        <span class="direction-flags">🇬🇧 → 🇷🇺</span>
+                        <label class="form-check-label" for="primary_to_secondary">
+                            Show me English words, I'll answer in Russian
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nb_questions">Number of Questions: <span id="questionValue">10</span></label>
+            <input type="range" 
+                   name="nb_questions" 
+                   id="nb_questions" 
+                   min="1" 
+                   max="50" 
+                   value="10" 
+                   class="form-control"
+                   oninput="document.getElementById('questionValue').textContent=this.value">
+        </div>
+
+        <button type="submit" class="btn btn-primary quiz-button">Start Global Quiz</button>
+    </form>
+</div>
+
+<div class="quiz-options">
+    <h3>Other options:</h3>
+    <ol>
+        <li><a href="/nyi">Focus Mode (select specific groups)</a></li>
+        <li><a href="/">Home</a></li>
+    </ol>
+</div>
+
+<div class="stats">
+    <h3>Statistics:</h3>
+    <ul>
+        <li>Available words: {{ nb_words_available }}</li>
+    </ul>
+</div>
+
+{% endblock %}

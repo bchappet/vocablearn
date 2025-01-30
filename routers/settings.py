@@ -2,7 +2,6 @@ from fastapi import APIRouter, Request, Form
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from models.database import SessionDep
-from models.tables import Settings
 from sqlmodel import select
 
 router = APIRouter()
@@ -32,10 +31,8 @@ async def update_settings(
     
     # Create new settings
     settings = Settings(
-        ru_to_en=(direction == "ru_to_en"),
         nb_questions=questions_per_quiz
     )
     db.add(settings)
-    print(f"Settings updated: {settings}")
     db.commit()
     return RedirectResponse("/", status_code=303)

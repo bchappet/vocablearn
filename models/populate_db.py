@@ -3,20 +3,32 @@ import argparse
 from pathlib import Path
 from .database import engine
 from sqlmodel import Session, SQLModel
-from models.tables import Group, Word, Settings
+from models.tables import Group, Word, WordProgress
 
 def erase_database():
     """Erase and recreate all tables, then add default settings."""
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
     
-    # Add default settings
-    with Session(engine) as session:
-        default_settings = Settings()
-        session.add(default_settings)
-        session.commit()
-
+ 
 def populate_from_csv(csv_path: str, erase_first: bool = False):
+    """Populate the database with words and groups from a CSV file.
+
+    Parameters
+    ----------
+    csv_path : str
+        Path to the CSV file containing word data
+    erase_first : bool, optional
+        If True, erases the database before populating, by default False
+
+    Notes
+    -----
+    Expected CSV columns:
+    - group: The group/category name for the word
+    - primary_text: The word in the primary language
+    - secondary_text: The word in the secondary language
+    - mnemonic: Optional mnemonic device (can be empty)
+    """
     if erase_first:
         erase_database()
     
@@ -29,11 +41,11 @@ def populate_from_csv(csv_path: str, erase_first: bool = False):
             
             for row in csv_reader:
                 group_name = row.get('group', '').strip()
-                english = row.get('english', '').strip()
-                russian = row.get('russian', '').strip()
-                mnemonic = row.get('mnemonic', '').strip()  # Now optional
+                primary_text = row.get('english', '').strip()
+                secondary_text = row.get('russian', '').strip()
+                mnemonic = row.get('mnemonic', '').strip()  # Optional
                 
-                if not all([group_name, english, russian]):  # Removed mnemonic from required fields
+                if not all([group_name, primary_text, secondary_text]):
                     continue
                 
                 # Get or create group
@@ -47,8 +59,8 @@ def populate_from_csv(csv_path: str, erase_first: bool = False):
                 
                 # Create word (mnemonic will be None if not provided)
                 word_entry = Word(
-                    english=english,
-                    russian=russian,
+                    primary_text=primary_text,
+                    secondary_text=secondary_text,
                     mnemonic=mnemonic if mnemonic else None,
                     group_id=group.id
                 )
@@ -56,16 +68,16 @@ def populate_from_csv(csv_path: str, erase_first: bool = False):
             
             session.commit()
 
-def populate_all_csvs(csv_dir: str, erase_first: bool = False):
+def populate_all_csvs(csv_path: str, erase_first: bool = False):
     if erase_first:
         erase_database()
     
-    csv_path = Path(csv_dir)
-    if not csv_path.is_dir():
-        raise ValueError(f"Directory not found: {csv_dir}")
-    
-    for csv_file in csv_path.glob("*.csv"):
-        populate_from_csv(str(csv_file), erase_first=False)
+    csv_path = Path(csv_path)
+    if csv_path.is_dir():
+        for csv_file in csv_path.glob("*.csv"):
+            populate_from_csv(str(csv_file), erase_first=False)
+    else:
+        populate_from_csv(csv_path, erase_first=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Populate database from CSV files')

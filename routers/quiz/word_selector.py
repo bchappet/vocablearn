@@ -1,7 +1,7 @@
 from typing import List
 from sqlalchemy import func
 from models.database import SessionDep
-from models.tables import Word, Settings
+from models.tables import Word
 
 def choose_next_words(db: SessionDep, nb_words_to_choose: int) -> List[Word]:
     """

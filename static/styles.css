@@ -208,3 +208,42 @@ textarea {
     color: var(--danger-color);
     font-weight: bold;
 }
+
+/* Quiz Direction Styles */
+.direction-options {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.direction-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.direction-flags {
+    font-size: 1.2em;
+    white-space: nowrap;
+}
+
+.form-check-label {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.form-check-label:hover {
+    background-color: #e9ecef;
+}
+
+/* Quiz specific styles */
+.quiz-button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: bold;
+}

@@ -21,7 +21,7 @@
 
     <div class="answer-section">
         <div class="answer-label">Your answer:</div>
-        {% if not ru_to_en %}
+        {% if primary_to_secondary %}
         {% include "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html" %}
         {% else %}
         <form method="POST"

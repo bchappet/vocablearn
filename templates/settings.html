@@ -10,8 +10,8 @@
         <div class="form-group">
             <label for="direction">Quiz Direction:</label>
             <select name="direction" id="direction" class="form-control">
-                <option value="ru_to_en" {% if settings and settings.ru_to_en %}selected{% endif %}>Russian → English</option>
-                <option value="en_to_ru" {% if settings and not settings.ru_to_en %}selected{% endif %}>English → Russian</option>
+                <option value="primary_to_secondary" {% if settings and settings.primary_to_secondary %}selected{% endif %}>Russian → English</option>
+                <option value="secondary_to_primary" {% if settings and not settings.primary_to_secondary %}selected{% endif %}>English → Russian</option>
             </select>
         </div>
 
