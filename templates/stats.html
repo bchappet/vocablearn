@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Progress Stats{% endblock %}
+
+{% block header %}Your Progress{% endblock %}
+
+{% block content %}
+<div class="stats-container">
+    <div class="stats-card">
+        <h3>Mastery Progress</h3>
+        <div class="progress-bar">
+            <div class="progress" style="width: {{ (mastered_words / total_words * 100)|round(1) }}%"></div>
+        </div>
+        <p class="stats-text">
+            <span class="stats-number">{{ mastered_words }}/{{ total_words }}</span> words mastered
+        </p>
+        <p class="stats-subtext">
+            (A word is considered mastered when answered correctly >90% of the time after at least 3 attempts)
+        </p>
+    </div>
+</div>
+{% endblock %} 
