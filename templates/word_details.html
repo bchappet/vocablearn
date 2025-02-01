@@ -30,8 +30,8 @@
             {% for word in words %}
             <tr data-group-id="{{ word.group_id }}">
                 <td>{{ word.group_name }}</td>
-                <td>{{ word.english }}</td>
-                <td>{{ word.russian }}</td>
+                <td>{{ word.primary_text }}</td>
+                <td>{{ word.secondary_text }}</td>
                 <td>{{ word.mnemonic }}</td>
                 <td>{{ "%.1f"|format(word.mastery * 100) if word.mastery is not none else "0.0" }}%</td>
             </tr>
