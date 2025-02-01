@@ -111,7 +111,8 @@ def read_word_details(request: Request, session: SessionDep):
             "primary_text": word.primary_text,
             "secondary_text": word.secondary_text,
             "mnemonic": word.mnemonic,
-            "mastery": word.mastery
+            "mastery": word.mastery,
+            "attempt_count": word.attempt_count
         }
         for word, group_name in results
     ]

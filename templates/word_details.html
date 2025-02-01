@@ -24,6 +24,7 @@
                 <th>Russian</th>
                 <th>Mnemonic</th>
                 <th>Mastery</th>
+                <th>Attempts</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td>{{ word.secondary_text }}</td>
                 <td>{{ word.mnemonic }}</td>
                 <td>{{ "%.1f"|format(word.mastery * 100) if word.mastery is not none else "0.0" }}%</td>
+                <td>{{ word.attempt_count }}</td>
             </tr>
             {% endfor %}
         </tbody>
