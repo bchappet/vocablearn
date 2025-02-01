@@ -6,41 +6,8 @@
 
 {% block content %}
 <div class="settings-form">
-    <form method="POST">
-        <div class="form-group">
-            <label for="direction">Quiz Direction:</label>
-            <select name="direction" id="direction" class="form-control">
-                <option value="primary_to_secondary" {% if settings and settings.primary_to_secondary %}selected{% endif %}>Russian → English</option>
-                <option value="secondary_to_primary" {% if settings and not settings.primary_to_secondary %}selected{% endif %}>English → Russian</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="questions_per_quiz">Questions per Quiz: <span id="sliderValue">{{ settings.nb_questions if settings else 10 }}</span></label>
-            <input type="range" 
-                   name="questions_per_quiz" 
-                   id="questions_per_quiz" 
-                   min="1" 
-                   max="50" 
-                   value="{{ settings.nb_questions if settings else 10 }}" 
-                   class="form-control"
-                   oninput="document.getElementById('sliderValue').textContent=this.value">
-        </div>
-
-        <button type="submit" class="btn btn-primary">Save Settings</button>
-    </form>
+<p>No settings available yet.</p>
+<p><a href="/">Return to home</a></p>
 </div>
 
-<style>
-.form-group {
-    margin-bottom: 1.5rem;
-}
-input[type="range"] {
-    width: 100%;
-}
-#sliderValue {
-    font-weight: bold;
-    margin-left: 0.5rem;
-}
-</style>
 {% endblock %}
