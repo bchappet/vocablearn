@@ -6,8 +6,9 @@
 
 {% block content %}
 <div class="settings-form">
-<p>No settings available yet.</p>
-<p><a href="/">Return to home</a></p>
+    <div class="settings-option">
+        <a href="{{ url_for('keyboard_settings') }}" class="settings-link">Configure Keyboard</a>
+    </div>
+    <p><a href="/">Return to home</a></p>
 </div>
-
 {% endblock %}

@@ -8,8 +8,8 @@ from utils.web import russian_keyboard_layout
 
 
 router = APIRouter(
-    prefix="/keyboard",
-    tags=["keyboard"],
+    prefix="/settings",
+    tags=["settings"],
 )
 
 templates = Jinja2Templates(directory="templates")
@@ -22,6 +22,25 @@ async def read_keyboard(request: Request) -> HTMLResponse:
 
     russian_layout = russian_keyboard_layout()
     
+    
+    template_name = "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html"
+    return templates.TemplateResponse(
+        template_name,
+        {
+            "request": request,
+            "russian_layout": russian_layout
+        }
+    )
+
+
+
+
+@router.get("/keyboard", name="keyboard_settings", response_class=HTMLResponse)
+async def keyboard_settings(request: Request) -> HTMLResponse:
+    user_agent = request.headers.get("user-agent", "")
+    is_mobile_device = is_mobile(user_agent)
+    
+    russian_layout = russian_keyboard_layout()
     
     template_name = "keyboard_mobile.html" if is_mobile_device else "keyboard_desktop.html"
     return templates.TemplateResponse(
