@@ -42,6 +42,7 @@ def process_answer(db: SessionDep, word: Word, user_answer: str,
     word.attempt_count += 1
     if is_correct:
         word.success_count += 1
+    word.mastery = word.success_count / word.attempt_count
     
     db.commit()
     
