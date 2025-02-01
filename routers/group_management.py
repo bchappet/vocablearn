@@ -12,6 +12,13 @@ class WordEntry(BaseModel):
     russian: str
     mnemonic: Optional[str] = None
 
+class WordGroupUpdate(BaseModel):
+    word_id: int
+    new_group_id: int
+
+class WordDelete(BaseModel):
+    word_id: int
+
 router = APIRouter(
     prefix="/manage",
     tags=["group-management"]
@@ -125,3 +132,54 @@ def read_word_details(request: Request, session: SessionDep):
             "groups": groups
         }
     )
+
+@router.get("/manage_group", response_class=HTMLResponse)
+def read_manage_group(request: Request, session: SessionDep):
+    # Query to get all groups with their words
+    statement = (
+        select(
+            Group,
+            func.count(Word.id).label("word_count")
+        )
+        .outerjoin(Word)
+        .group_by(Group.id)
+    )
+    results = session.exec(statement).all()
+    
+    # Get words for each group
+    groups_with_data = []
+    for group, count in results:
+        words = session.exec(
+            select(Word).where(Word.group_id == group.id)
+        ).all()
+        groups_with_data.append({
+            "id": group.id,
+            "name": group.name,
+            "word_count": count,
+            "words": words
+        })
+
+    return templates.TemplateResponse(
+        request=request,
+        name="manage_group.html",
+        context={"groups": groups_with_data}
+    )
+
+@router.post("/update_word_group")
+async def update_word_group(data: WordGroupUpdate, session: SessionDep):
+    word = session.get(Word, data.word_id)
+    if word:
+        word.group_id = data.new_group_id
+        session.add(word)
+        session.commit()
+        return {"status": "success"}
+    return {"status": "error", "message": "Word not found"}
+
+@router.post("/delete_word")
+async def delete_word(data: WordDelete, session: SessionDep):
+    word = session.get(Word, data.word_id)
+    if word:
+        session.delete(word)
+        session.commit()
+        return {"status": "success"}
+    return {"status": "error", "message": "Word not found"}
