@@ -2,9 +2,10 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from models.database import SessionDep
-from models.tables import Word
+from models.tables import Word, Group
 from utils.web import is_mobile, russian_keyboard_layout
 from . import session_manager, word_selector, answer_handler
+from sqlalchemy import func
 
 router = APIRouter(
     prefix="/quiz",
@@ -24,6 +25,25 @@ def read_quiz(request: Request, db: SessionDep):
         }
     )
 
+@router.get("/focus", name="quiz_focus", response_class=HTMLResponse)
+def quiz_focus(request: Request, db: SessionDep):
+    # Get all distinct groups with their word counts and details
+    groups = db.query(
+        Word.group_id,
+        Group.name,
+        Group.description,
+        func.count(Word.id).label('word_count')
+    ).join(Group, Word.group_id == Group.id)\
+    .group_by(Word.group_id, Group.name, Group.description).all()
+    
+    return templates.TemplateResponse(
+        request=request,
+        name="quiz_focus.html",
+        context={
+            "groups": groups
+        }
+    )
+
 @router.post("/session")
 async def create_quiz_session(
     request: Request,
@@ -32,8 +52,15 @@ async def create_quiz_session(
     form = await request.form()
     nb_questions = int(form.get("nb_questions", 10))
     primary_to_secondary = form.get("direction") == "primary_to_secondary"
+    selected_groups = form.getlist("groups")  # Get selected groups if any
     
-    words = word_selector.choose_next_words(db, nb_questions)
+    # Update word selection based on groups
+    words = word_selector.choose_next_words(
+        db, 
+        nb_questions, 
+        groups=selected_groups if selected_groups else None
+    )
+    
     session_id = session_manager.create_session(
         words=words,
         primary_to_secondary=primary_to_secondary,
@@ -135,12 +162,27 @@ def quiz_summary(request: Request, session_id: str):
     if not quiz_session:
         return RedirectResponse("/quiz", status_code=303)
     
+    # Create word progress details
+    word_progress = []
+    for i, word in enumerate(quiz_session["words"]):
+        word_progress.append({
+            "primary_text": word.primary_text,
+            "secondary_text": word.secondary_text,
+            "success_rate": (word.success_count / word.attempt_count * 100) if word.attempt_count > 0 else 0,
+            "success_count": word.success_count,
+            "attempt_count": word.attempt_count,
+            "current_answer": quiz_session["answers"][i],
+            "is_correct": quiz_session["answers"][i] == (word.secondary_text if quiz_session["primary_to_secondary"] else word.primary_text)
+        })
+    
     return templates.TemplateResponse(
         request=request,
         name="quiz_summary.html",
         context={
             "score": quiz_session["score"],
-            "nb_questions": len(quiz_session["words"])
+            "nb_questions": len(quiz_session["words"]),
+            "word_progress": word_progress,
+            "group_id": session_id
         }
     )
 

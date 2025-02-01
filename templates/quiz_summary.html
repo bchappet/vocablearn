@@ -9,8 +9,13 @@
 <div class="summary-container">
     <div class="score-section">
         <h3>Score</h3>
-        <p class="score">{{ score }}/{{ nb_questions }}</p>
-        <p class="percentage">{{ (score / nb_questions * 100)|round(1) }}%</p>
+        {% if nb_questions > 0 %}
+            <p class="score">{{ score }}/{{ nb_questions }}</p>
+            <p class="percentage">{{ (score / nb_questions * 100)|round(1) }}%</p>
+        {% else %}
+            <p class="score">No words available</p>
+            <p class="percentage">-</p>
+        {% endif %}
     </div>
 
     <div class="stats-section">
@@ -26,17 +31,17 @@
         <h3>Word Progress</h3>
         <div class="word-progress-list">
             {% for word in word_progress %}
-            <div class="word-progress-item {% if word.is_correct %}correct{% else %}incorrect{% endif %}">
-                <div class="word-details">
-                    <span class="question">{{ word.word }}</span>
-                    <span class="answer">{{ word.correct_answer }}</span>
-                    {% if not word.is_correct %}
-                    <span class="user-answer">Your answer: {{ word.user_answer }}</span>
-                    {% endif %}
+            <div class="word-item {% if word.is_correct %}correct{% else %}incorrect{% endif %}">
+                <div class="word-texts">
+                    <span class="primary-text">{{ word.primary_text }}</span>
+                    <span class="secondary-text">{{ word.secondary_text }}</span>
                 </div>
                 <div class="word-stats">
-                    <span class="success-rate">Success rate: {{ word.success_rate }}%</span>
-                    <span class="attempts">Total attempts: {{ word.attempts }}</span>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {{ word.success_rate }}%"></div>
+                    </div>
+                    <span class="success-rate">{{ "%.1f"|format(word.success_rate) }}% success rate</span>
+                    <span class="attempt-count">({{ word.success_count }}/{{ word.attempt_count }} attempts)</span>
                 </div>
             </div>
             {% endfor %}

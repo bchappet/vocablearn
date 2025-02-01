@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Quiz Time{% endblock %}
+{% block title %}Quiz Focus Mode{% endblock %}
 
-{% block header %}Quiz Time!{% endblock %}
+{% block header %}Focus Mode Quiz{% endblock %}
 
 {% block content %}
-
 <div class="quiz-setup">
     <form action="/quiz/session" method="post">
+        
         <div class="form-group">
             <label class="d-block mb-3">Quiz Direction:</label>
             <div class="direction-options">
@@ -21,7 +21,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="form-check mb-2"></div>
+                <div class="form-check mb-2">
                     <div class="direction-container">
                         <input class="form-check-input" type="radio" name="direction" id="primary_to_secondary"
                             value="primary_to_secondary">
@@ -46,23 +46,25 @@
                    oninput="document.getElementById('questionValue').textContent=this.value">
         </div>
 
-        <button type="submit" class="btn btn-primary quiz-button">Start Global Quiz</button>
+        <div class="form-group"></div>
+            <label class="d-block mb-3">Select Word Groups:</label>
+            <div class="groups-selection">
+                {% for group in groups %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="groups" value="{{ group.group_id }}" id="group_{{ group.group_id }}">
+                    <label class="form-check-label" for="group_{{ group.group_id }}">
+                        {{ group.name }} ({{ group.word_count }} words)
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary quiz-button">Start Focus Quiz</button>
     </form>
-</div>
 
-<div class="quiz-options">
-    <h3>Other options:</h3>
-    <ol>
-        <li><a href="/quiz/focus">Focus Mode (select specific groups)</a></li>
-        <li><a href="/">Home</a></li>
-    </ol>
+    <div class="mt-3">
+        <a href="/quiz" class="btn btn-secondary">Back to Quiz Menu</a>
+    </div>
 </div>
-
-<div class="stats">
-    <h3>Statistics:</h3>
-    <ul>
-        <li>Available words: {{ nb_words_available }}</li>
-    </ul>
-</div>
-
-{% endblock %}
+{% endblock %} 
