@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 from .database import engine
 from sqlmodel import Session, SQLModel
-from models.tables import Group, Word, WordProgress
+from models.tables import Group, Word
 
 def erase_database():
     """Erase and recreate all tables, then add default settings."""

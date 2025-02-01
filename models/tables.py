@@ -20,15 +20,3 @@ class Word(SQLModel, table=True):
     attempt_count: int = Field(default=0)
     
     group: Group = Relationship(back_populates="words")
-    progress: List["WordProgress"] = Relationship(back_populates="word")
-
-class WordProgress(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    word_id: int = Field(foreign_key="word.id")
-    timestamp: datetime = Field(default_factory=datetime.utcnow)
-    primary_to_secondary: bool
-    correct: bool
-    response_time: float  # in seconds
-    
-    word: Word = Relationship(back_populates="progress")
-

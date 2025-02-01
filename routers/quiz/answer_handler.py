@@ -1,6 +1,6 @@
 from datetime import datetime
 from models.database import SessionDep
-from models.tables import Word, WordProgress
+from models.tables import Word
 
 def process_answer(db: SessionDep, word: Word, user_answer: str,
                    start_time: datetime, primary_to_secondary: bool) -> bool:
@@ -43,16 +43,6 @@ def process_answer(db: SessionDep, word: Word, user_answer: str,
     if is_correct:
         word.success_count += 1
     
-    # Create progress entry
-    progress = WordProgress(
-        word_id=word.id,
-        correct=is_correct,
-        response_time=response_time,
-        primary_to_secondary=primary_to_secondary
-    )
-    db.add(progress)
-    
-    # Important: Explicitly commit the changes
     db.commit()
     
     return is_correct
