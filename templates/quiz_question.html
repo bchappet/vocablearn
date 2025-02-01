@@ -27,7 +27,7 @@
         <form method="POST"
             action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) }}"
             id="answer-form">
-            <input type="text" name="answer" class="text-input" autocomplete="off">
+            <input type="text" name="answer" class="text-input" autocomplete="off" autofocus="true">
         </form>
         {% endif %}
     </div>

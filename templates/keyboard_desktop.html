@@ -15,7 +15,7 @@
     <form method="{{'POST' if request.path_params.get('session_id') else 'GET'}}"
         action="{{ url_for('quiz_answer', session_id=request.path_params.get('session_id', None)) if request.path_params.get('session_id') else url_for('read_root') }}"
         id="answer-form">
-        <textarea class="input-area" placeholder="Your answer:"></textarea>
+        <textarea class="input-area" placeholder="Your answer:" autofocus="true"></textarea>
         <input type="hidden" name="answer" id="hidden-answer">
 
         <div class="keyboard">
