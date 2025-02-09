@@ -1,51 +1,51 @@
 group,english,russian
-Movement,"take imp.","брать"
-Movement,"take p.","взять"
-Movement,"open imp.","открывать"
-Movement,"open p.","открыть"
-Movement,"close imp.","закрывать"
-Movement,"close p.","закрыть"
-Communication,"speak imp.","говорить"
-Communication,"speak p.","сказать"
-Communication,"tell imp.","рассказывать"
-Communication,"tell p.","рассказать"
-Communication,"show imp.","показывать"
-Communication,"show p.","показать"
-Daily Activities,"read imp.","читать"
-Daily Activities,"read p.","прочитать"
-Daily Activities,"write imp.","писать"
-Daily Activities,"write p.","написать"
-Daily Activities,"eat imp.","есть"
-Daily Activities,"eat p.","съесть"
-Daily Activities,"drink imp.","пить"
-Daily Activities,"drink p.","выпить"
-Daily Activities,"sleep imp.","спать"
-Daily Activities,"sleep p.","поспать"
-Work and Study,"work imp.","работать"
-Work and Study,"work p.","поработать"
-Work and Study,"study imp.","учить"
-Work and Study,"study p.","выучить"
-Work and Study,"prepare imp.","готовить"
-Work and Study,"prepare p.","приготовить"
-Financial,"pay imp.","платить"
-Financial,"pay p.","заплатить"
-Financial,"buy imp.","покупать"
-Financial,"buy p.","купить"
-Financial,"earn imp.","зарабатывать"
-Financial,"earn p.","заработать"
-Financial,"sell imp.","продавать"
-Financial,"sell p.","продать"
-Mental Activities,"think imp.","думать"
-Mental Activities,"think p.","подумать"
-Mental Activities,"find imp.","находить"
-Mental Activities,"find p.","найти"
-Mental Activities,"forget imp.","забывать"
-Mental Activities,"forget p.","забыть"
-Mental Activities,"solve imp.","решать"
-Mental Activities,"solve p.","решить"
-State Changes,"become imp.","становиться"
-State Changes,"become p.","стать"
-State Changes,"get up imp.","вставать"
-State Changes,"get up p.","встать"
-State Changes,"get tired imp.","уставать"
-State Changes,"get tired p.","устать"
+Movement,take imp.,брать
+Movement,take p.,взять
+Movement,open imp.,открывать
+Movement,open p.,открыть
+Movement,close imp.,закрывать
+Movement,close p.,закрыть
+Communication,speak imp.,говорить
+Communication,speak p.,сказать
+Communication,tell imp.,рассказывать
+Communication,tell p.,рассказать
+Communication,show imp.,показывать
+Communication,show p.,показать
+Daily Activities,read imp.,читать
+Daily Activities,read p.,прочитать
+Daily Activities,write imp.,писать
+Daily Activities,write p.,написать
+Daily Activities,eat imp.,есть
+Daily Activities,eat p.,съесть
+Daily Activities,drink imp.,пить
+Daily Activities,drink p.,выпить
+Daily Activities,sleep imp.,спать
+Daily Activities,sleep p.,поспать
+Work and Study,work imp.,работать
+Work and Study,work p.,поработать
+Work and Study,study imp.,учить
+Work and Study,study p.,выучить
+Work and Study,prepare imp.,готовить
+Work and Study,prepare p.,приготовить
+Financial,pay imp.,платить
+Financial,pay p.,заплатить
+Financial,buy imp.,покупать
+Financial,buy p.,купить
+Financial,earn imp.,зарабатывать
+Financial,earn p.,заработать
+Financial,sell imp.,продавать
+Financial,sell p.,продать
+Mental Activities,think imp.,думать
+Mental Activities,think p.,подумать
+Mental Activities,find imp.,находить
+Mental Activities,find p.,найти
+Mental Activities,forget imp.,забывать
+Mental Activities,forget p.,забыть
+Mental Activities,solve imp.,решать
+Mental Activities,solve p.,решить
+State Changes,become imp.,становиться
+State Changes,become p.,стать
+State Changes,get up imp.,вставать
+State Changes,get up p.,встать
+State Changes,get tired imp.,уставать
+State Changes,get tired p.,устать
