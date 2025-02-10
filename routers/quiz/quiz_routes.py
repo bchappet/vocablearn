@@ -102,7 +102,7 @@ async def submit_answer(session_id: str, request: Request, db: SessionDep):
         return RedirectResponse("/quiz", status_code=303)
     
     form = await request.form()
-    user_answer = form.get("answer")
+    user_answer = form.get("answer").rstrip()
 
     question_id = quiz_session["question_id"]
     session_word = quiz_session["words"][question_id]
