@@ -165,14 +165,18 @@ def quiz_summary(request: Request, session_id: str):
     # Create word progress details
     word_progress = []
     for i, word in enumerate(quiz_session["words"]):
+        if len(quiz_session["answers"]) > i:
+            answer = quiz_session["answers"][i]
+        else:
+            continue
         word_progress.append({
             "primary_text": word.primary_text,
             "secondary_text": word.secondary_text,
             "success_rate": (word.success_count / word.attempt_count * 100) if word.attempt_count > 0 else 0,
             "success_count": word.success_count,
             "attempt_count": word.attempt_count,
-            "current_answer": quiz_session["answers"][i],
-            "is_correct": quiz_session["answers"][i] == (word.secondary_text if quiz_session["primary_to_secondary"] else word.primary_text)
+            "current_answer": answer,
+            "is_correct": answer == (word.secondary_text if quiz_session["primary_to_secondary"] else word.primary_text)
         })
     
     return templates.TemplateResponse(
