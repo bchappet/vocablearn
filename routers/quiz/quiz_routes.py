@@ -45,28 +45,15 @@ def quiz_focus(request: Request, db: SessionDep):
     )
 
 @router.post("/session")
-async def create_quiz_session(
-    request: Request,
-    db: SessionDep
-):
+async def create_quiz_session( request: Request, db: SessionDep):
     form = await request.form()
     nb_questions = int(form.get("nb_questions", 10))
     primary_to_secondary = form.get("direction") == "primary_to_secondary"
     selected_groups = form.getlist("groups")  # Get selected groups if any
+    session_id = session_manager.start_new_session(db, nb_questions, primary_to_secondary, selected_groups)
     
-    # Update word selection based on groups
-    words = word_selector.choose_next_words(
-        db, 
-        nb_questions, 
-        groups=selected_groups if selected_groups else None
-    )
-    
-    session_id = session_manager.create_session(
-        words=words,
-        primary_to_secondary=primary_to_secondary,
-        nb_questions=nb_questions
-    )
     return RedirectResponse(f"/quiz/{session_id}/question", status_code=303)
+
 
 @router.get("/{session_id}/question", name="quiz_question", response_class=HTMLResponse)
 def quiz_question(request: Request, session_id: str, db: SessionDep):
@@ -156,6 +143,21 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
         }
     )
 
+
+@router.get("/{session_id}/tryagain")
+def recreate_quiz_session(request: Request, session_id: str, db: SessionDep):
+    """
+    when we click on try-again we create a new session with the same 
+    parameters but with a new selection of words
+    """
+    quiz_session = session_manager.get_session(session_id)
+    if not quiz_session:
+        return RedirectResponse("/quiz", status_code=303)
+    
+    session_id = session_manager.start_new_session(db, quiz_session["nb_questions"], quiz_session["primary_to_secondary"], quiz_session["selected_groups"])
+    return RedirectResponse(f"/quiz/{session_id}/question", status_code=303)
+
+
 @router.get("/{session_id}/summary", name="quiz_summary", response_class=HTMLResponse)
 def quiz_summary(request: Request, session_id: str):
     quiz_session = session_manager.get_session(session_id)
@@ -186,7 +188,6 @@ def quiz_summary(request: Request, session_id: str):
             "score": quiz_session["score"],
             "nb_questions": len(quiz_session["words"]),
             "word_progress": word_progress,
-            "group_id": session_id
         }
     )
 

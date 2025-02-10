@@ -10,11 +10,11 @@
     <div class="score-section">
         <h3>Score</h3>
         {% if nb_questions > 0 %}
-            <p class="score">{{ score }}/{{ nb_questions }}</p>
-            <p class="percentage">{{ (score / nb_questions * 100)|round(1) }}%</p>
+        <p class="score">{{ score }}/{{ nb_questions }}</p>
+        <p class="percentage">{{ (score / nb_questions * 100)|round(1) }}%</p>
         {% else %}
-            <p class="score">No words available</p>
-            <p class="percentage">-</p>
+        <p class="score">No words available</p>
+        <p class="percentage">-</p>
         {% endif %}
     </div>
 
@@ -49,7 +49,7 @@
     </div>
 
     <div class="navigation">
-        <a href="/quiz/{{ group_id }}" class="btn btn-primary">Try Again</a>
+        <a href="/quiz/{{request.path_params['session_id']}}/tryagain" class="btn btn-primary">Try Again</a>
         <a href="/" class="btn btn-secondary">Back to Home</a>
     </div>
 </div>
