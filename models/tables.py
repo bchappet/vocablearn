@@ -20,3 +20,6 @@ class Word(SQLModel, table=True):
     attempt_count: int = Field(default=0)
     
     group: Group = Relationship(back_populates="words")
+
+    def __repr__(self) -> str:
+        return f"{self.primary_text}"
