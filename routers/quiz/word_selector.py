@@ -1,11 +1,26 @@
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from sqlalchemy import func
 from models.database import SessionDep
 from models.tables import Word
 import random
+from enum import Enum
+from enum import auto
+from dataclasses import dataclass
+
+class ChoosenReasonType(Enum):
+    NEW = auto()
+    TO_WORK = auto()
+    RANDOM = auto()
+
+@dataclass
+class ChoosenReason:
+    type : ChoosenReasonType
+    details : str
 
 
-def select_words(words: List[Word], nb_words_to_choose: int) -> List[Word]:
+
+
+def select_words(words: List[Word], nb_words_to_choose: int) -> Tuple[List[Word], List[ChoosenReason]]:
     """
     Select half:
     - Words never shown
@@ -13,9 +28,15 @@ def select_words(words: List[Word], nb_words_to_choose: int) -> List[Word]:
     """
     words = words.copy()
     random.shuffle(words)
+
+    choosen_reason = []
+
     never_shown = [w for w in words if w.attempt_count == 0]
     nb_never_shown = min(nb_words_to_choose//2, len(never_shown))
     never_shown = never_shown[:nb_never_shown]
+    for w in never_shown:
+        reason = ChoosenReason(ChoosenReasonType.NEW, "New word !")
+        choosen_reason.append(reason)
     print(f"{nb_never_shown=} {never_shown}")
 
     low_mastery = []
@@ -25,16 +46,24 @@ def select_words(words: List[Word], nb_words_to_choose: int) -> List[Word]:
 
     nb_low_mastery = min(nb_words_to_choose//4, len(low_mastery))
     low_mastery = low_mastery[:nb_low_mastery]
+    for w in low_mastery:
+        reason = ChoosenReason(ChoosenReasonType.TO_WORK, f"Need to work this word because you succeed {word.success_count} out of {word.attempt_count}.")
+        choosen_reason.append(reason)
     print(f"{nb_low_mastery=} {low_mastery}")
 
     nb_rest_of_the_words = nb_words_to_choose-(nb_low_mastery+nb_never_shown)
     result = never_shown + low_mastery
     rest_of_the_words = [w for w in words if w not in result]
     rest_of_the_words = rest_of_the_words[:nb_rest_of_the_words]
+    for w in rest_of_the_words:
+        reason = ChoosenReason(ChoosenReasonType.RANDOM,"random")
+        choosen_reason.append(reason)
     print(f"{nb_rest_of_the_words=} {rest_of_the_words}")
 
+
     result += rest_of_the_words
-    return result
+   
+    return result,choosen_reason
 
 
 def choose_next_words( db: SessionDep, nb_words_to_choose: int,
@@ -57,6 +86,6 @@ def choose_next_words( db: SessionDep, nb_words_to_choose: int,
         query = query.filter(Word.group_id.in_(groups))
     
     all_words = query.all()
-    words = select_words(all_words, nb_words_to_choose) 
+    words, choosen_reason = select_words(all_words, nb_words_to_choose) 
     
-    return words
+    return words, choosen_reason

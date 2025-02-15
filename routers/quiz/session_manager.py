@@ -2,17 +2,20 @@ from typing import Dict, List
 from datetime import datetime
 from models.database import SessionDep
 from . import word_selector
+from .word_selector import ChoosenReason
 import uuid
 
 # In-memory session storage (replace with database in production)
 sessions: Dict[str, dict] = {}
 
-def _create_session(words: list, primary_to_secondary: bool, nb_questions: int, selected_groups: List[str]) -> str:
+def _create_session(words: list, primary_to_secondary: bool, nb_questions: int, selected_groups: List[str],
+                    choosen_reason: List[ChoosenReason]) -> str:
     session_id = str(uuid.uuid4())
     quiz_session = {
         "session_id": session_id,
         "question_id": 0,
         "words": words,  # These are now the actual Word objects from the database
+        "choosen_reason": choosen_reason,  # why we choose those words
         "answers": [],
         "score": 0,
         "start_time": datetime.utcnow(),
@@ -25,11 +28,11 @@ def _create_session(words: list, primary_to_secondary: bool, nb_questions: int, 
 
 def start_new_session(db : SessionDep, nb_questions: int, primary_to_secondary: bool, selected_groups: List[str]) -> str:
     # Update word selection based on groups
-    words = word_selector.choose_next_words(db, nb_questions, 
+    words, choosen_reason = word_selector.choose_next_words(db, nb_questions, 
         groups=selected_groups if selected_groups else None
     )
 
-    return _create_session( words, primary_to_secondary, nb_questions, selected_groups)
+    return _create_session( words, primary_to_secondary, nb_questions, selected_groups, choosen_reason)
     
 
 

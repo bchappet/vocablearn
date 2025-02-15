@@ -68,12 +68,13 @@ def quiz_question(request: Request, session_id: str, db: SessionDep):
     
     word = quiz_session["words"][question_id]
     question = word.primary_text if quiz_session["primary_to_secondary"] else word.secondary_text
-    
+    choosen_reason = quiz_session["choosen_reason"][question_id]
     return templates.TemplateResponse(
         request=request,
         name="quiz_question.html",
         context={
             "word_to_translate": question,
+            "choosen_reason": choosen_reason,
             "question_id": question_id,
             "nb_questions": nb_questions,
             "russian_layout": russian_keyboard_layout(),
