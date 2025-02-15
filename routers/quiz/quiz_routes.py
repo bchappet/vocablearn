@@ -90,7 +90,7 @@ async def submit_answer(session_id: str, request: Request, db: SessionDep):
         return RedirectResponse("/quiz", status_code=303)
     
     form = await request.form()
-    user_answer = form.get("answer").rstrip()
+    user_answer = form.get("answer").rstrip().lower()
 
     question_id = quiz_session["question_id"]
     session_word = quiz_session["words"][question_id]
@@ -109,6 +109,7 @@ async def submit_answer(session_id: str, request: Request, db: SessionDep):
     
     # Store only the ID in the session
     quiz_session["words"][question_id] = word
+    quiz_session["is_correct"].append(is_correct)
     
     session_manager.update_session_answer(session_id, is_correct, user_answer)
     return RedirectResponse(f"/quiz/{session_id}/answer", status_code=303)
@@ -129,7 +130,7 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
     last_answer = quiz_session["answers"][previous_question]
     question = last_word.primary_text if quiz_session["primary_to_secondary"] else last_word.secondary_text
     correct_answer = last_word.secondary_text if quiz_session["primary_to_secondary"] else last_word.primary_text
-
+    is_correct = quiz_session["is_correct"][-1]
     
     return templates.TemplateResponse(
         request=request,
@@ -138,7 +139,7 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
             "word": question,
             "user_answer": last_answer,
             "correct_answer": correct_answer,
-            "is_correct": last_answer == correct_answer,
+            "is_correct": is_correct,
             "success_count": last_word.success_count,
             "attempt_count": last_word.attempt_count,
         }

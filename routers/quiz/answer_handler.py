@@ -35,7 +35,7 @@ def process_answer(db: SessionDep, word: Word, user_answer: str,
     """
     
     correct_answer = word.secondary_text if primary_to_secondary else word.primary_text
-    is_correct = user_answer == correct_answer
+    is_correct = user_answer == correct_answer.rstrip().lower()
     response_time = (datetime.utcnow() - start_time).total_seconds()
     
     # Update word statistics

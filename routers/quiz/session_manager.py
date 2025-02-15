@@ -17,6 +17,7 @@ def _create_session(words: list, primary_to_secondary: bool, nb_questions: int, 
         "words": words,  # These are now the actual Word objects from the database
         "choosen_reason": choosen_reason,  # why we choose those words
         "answers": [],
+        "is_correct": [],
         "score": 0,
         "start_time": datetime.utcnow(),
         "primary_to_secondary": primary_to_secondary,
