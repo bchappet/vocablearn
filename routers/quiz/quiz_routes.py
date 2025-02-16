@@ -205,3 +205,6 @@ async def quiz_home(request: Request, db: SessionDep):
             "nb_words_available": nb_words_available
         }
     )
+
+
+    

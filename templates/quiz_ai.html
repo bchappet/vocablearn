@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz AI{% endblock %}
+
+{% block header %}Quiz AI{% endblock %}
+
+{% block content %}
+<div class="quiz-ai">
+    <p>Let's focus on: <strong>{{ focus_word_primary }} <-> {{ focus_word_secondary }}</strong></p>
+</div>
+
+<div class="quiz-options">
+    <h3>Would you like to:</h3>
+    <ol>
+        <li><a href="/quiz/ai/mnemonic/{{focus_word_secondary}}">Generate a mnemonic</a></li>
+    </ol>
+</div>
+{% endblock %}
+
+{% block navigation %}
+<div class="navigation">
+    <a href="/quiz/{{request.path_params['session_id']}}/question" class="btn btn-primary">Next Question</a>
+    <a href="/quiz/{{request.path_params['session_id']}}/summary" class="btn btn-secondary">End Quiz</a>
+</div>
+{% endblock %}

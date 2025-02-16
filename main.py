@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from routers import group_management, quiz, settings, database_management, stats
+from routers.quiz import ai
 from models.database import create_db_and_tables
 
 app = FastAPI()
@@ -22,6 +23,7 @@ app.include_router(quiz.router)
 app.include_router(settings.router)
 app.include_router(database_management.router)
 app.include_router(stats.router)
+app.include_router(ai.router)
 
 @app.get("/", response_class=HTMLResponse)
 def read_root(request: Request):

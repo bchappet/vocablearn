@@ -10,7 +10,7 @@
     <p>Your answer: <strong>{{ user_answer }}</strong></p>
     <p>Correct answer: <strong>{{ correct_answer }}</strong></p>
     <p>Success count: <strong>{{ success_count }}</strong></p>
-    <p>Attempt count: <strong>{{ attempt_count }}</strong></p>  
+    <p>Attempt count: <strong>{{ attempt_count }}</strong></p>
 </div>
 <script>
     document.addEventListener('keypress', function (event) {
@@ -25,5 +25,6 @@
 <div class="navigation">
     <a href="/quiz/{{request.path_params['session_id']}}/question" class="btn btn-primary">Next Question</a>
     <a href="/quiz/{{request.path_params['session_id']}}/summary" class="btn btn-secondary">End Quiz</a>
+    <a href="/quiz/ai/{{request.path_params['session_id']}}" class="btn btn-secondary">Get help</a>
 </div>
 {% endblock %}
