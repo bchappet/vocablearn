@@ -51,7 +51,7 @@ def read_manage(request: Request, session: SessionDep):
 
     return templates.TemplateResponse(
         request=request,
-        name="manage.html",
+        name="word_management/manage.html",
         context={"groups": groups_with_counts}
     )
 
@@ -59,7 +59,7 @@ def read_manage(request: Request, session: SessionDep):
 def read_manage_add_group(request: Request):
     return templates.TemplateResponse(
         request=request,
-        name="manage_add_group.html",
+        name="word_management/manage_add_group.html",
     )
 
 @router.post("/add_group")
@@ -126,7 +126,7 @@ def read_word_details(request: Request, session: SessionDep):
     
     return templates.TemplateResponse(
         request=request,
-        name="word_details.html",
+        name="word_management/word_details.html",
         context={
             "words": words_data,
             "groups": groups
@@ -161,7 +161,7 @@ def read_manage_group(request: Request, session: SessionDep):
 
     return templates.TemplateResponse(
         request=request,
-        name="manage_group.html",
+        name="word_management/manage_group.html",
         context={"groups": groups_with_data}
     )
 

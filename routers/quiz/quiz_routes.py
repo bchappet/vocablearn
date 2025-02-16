@@ -19,7 +19,7 @@ def read_quiz(request: Request, db: SessionDep):
     nb_words_available = db.query(Word).count()
     return templates.TemplateResponse(
         request=request,
-        name="quiz_menu.html",
+        name="quiz/quiz_menu.html",
         context={
             "nb_words_available": nb_words_available,
         }
@@ -38,7 +38,7 @@ def quiz_focus(request: Request, db: SessionDep):
     
     return templates.TemplateResponse(
         request=request,
-        name="quiz_focus.html",
+        name="quiz/quiz_focus.html",
         context={
             "groups": groups
         }
@@ -71,7 +71,7 @@ def quiz_question(request: Request, session_id: str, db: SessionDep):
     choosen_reason = quiz_session["choosen_reason"][question_id]
     return templates.TemplateResponse(
         request=request,
-        name="quiz_question.html",
+        name="quiz/quiz_question.html",
         context={
             "word_to_translate": question,
             "choosen_reason": choosen_reason,
@@ -134,7 +134,7 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
     
     return templates.TemplateResponse(
         request=request,
-        name="quiz_answer.html",
+        name="quiz/quiz_answer.html",
         context={
             "word": question,
             "user_answer": last_answer,
@@ -185,7 +185,7 @@ def quiz_summary(request: Request, session_id: str):
     
     return templates.TemplateResponse(
         request=request,
-        name="quiz_summary.html",
+        name="quiz/quiz_summary.html",
         context={
             "score": quiz_session["score"],
             "nb_questions": len(quiz_session["words"]),
@@ -199,7 +199,7 @@ async def quiz_home(request: Request, db: SessionDep):
     nb_words_available = db.query(Word).count()
     
     return templates.TemplateResponse(
-        "quiz_menu.html",
+        "quiz/quiz_menu.html",
         {
             "request": request,
             "nb_words_available": nb_words_available

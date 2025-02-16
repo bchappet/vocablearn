@@ -23,7 +23,7 @@ async def quiz_ai(request: Request, session_id: str):
     question_id = quiz_session['question_id']
     focus_word = quiz_session['words'][question_id]
     return templates.TemplateResponse(
-        "quiz_ai.html",
+        "ai/quiz_ai.html",
         {
             "request": request,
             "focus_word_primary": focus_word.primary_text,
