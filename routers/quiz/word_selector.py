@@ -18,8 +18,6 @@ class ChoosenReason:
     details : str
 
 
-
-
 def select_words(words: List[Word], nb_words_to_choose: int) -> Tuple[List[Word], List[ChoosenReason]]:
     """
     Select half:
@@ -31,6 +29,7 @@ def select_words(words: List[Word], nb_words_to_choose: int) -> Tuple[List[Word]
 
     choosen_reason = []
 
+    # new
     never_shown = [w for w in words if w.attempt_count == 0]
     nb_never_shown = min(nb_words_to_choose//2, len(never_shown))
     never_shown = never_shown[:nb_never_shown]
@@ -39,6 +38,7 @@ def select_words(words: List[Word], nb_words_to_choose: int) -> Tuple[List[Word]
         choosen_reason.append(reason)
     print(f"{nb_never_shown=} {never_shown}")
 
+    # to work
     low_mastery = []
     for word in words:
         if word.attempt_count > 3 and word.mastery < 0.75:
@@ -47,10 +47,12 @@ def select_words(words: List[Word], nb_words_to_choose: int) -> Tuple[List[Word]
     nb_low_mastery = min(nb_words_to_choose//4, len(low_mastery))
     low_mastery = low_mastery[:nb_low_mastery]
     for w in low_mastery:
-        reason = ChoosenReason(ChoosenReasonType.TO_WORK, f"Need to work this word because you succeed {word.success_count} out of {word.attempt_count}.")
+        reason = ChoosenReason(ChoosenReasonType.TO_WORK, 
+                               f"Need to work this word because you succeed {w.success_count} out of {w.attempt_count}.")
         choosen_reason.append(reason)
     print(f"{nb_low_mastery=} {low_mastery}")
 
+    # rest is random
     nb_rest_of_the_words = nb_words_to_choose-(nb_low_mastery+nb_never_shown)
     result = never_shown + low_mastery
     rest_of_the_words = [w for w in words if w not in result]
