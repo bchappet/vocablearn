@@ -5,6 +5,8 @@ from fastapi.templating import Jinja2Templates
 from models.database import SessionDep
 from models.tables import Word, Group
 from .. import session_manager
+from pydantic_ai.models.groq import GroqModel
+from pydantic_ai import Agent
 
 router = APIRouter(
     prefix="/quiz/ai",
@@ -34,4 +36,8 @@ async def quiz_ai(request: Request, session_id: str):
 
 @router.get("/mnemonic/{word}", name='generate_mnemonic')
 async def generate_mnemonic(request: Request, word: str):
-    return {'word': word}
+    model = GroqModel(model_name="mixtral-8x7b-32768",api_key="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")
+    agent = Agent(model, system_prompt='You are a russian language teacher. You role is to help the user to remember russian vocabulary.')
+    result = await agent.run(f'Please give me a mnemonic to remember the word {word}')
+    print(result.data)
+    return {'word': word, 'result': result.data}
