@@ -36,9 +36,9 @@ def start_new_session(db : SessionDep, nb_questions: int, primary_to_secondary: 
     return _create_session( words, primary_to_secondary, nb_questions, selected_groups, choosen_reason)
     
 
-
 def get_session(session_id: str) -> dict:
     return sessions.get(session_id)
+
 
 def update_session_answer(session_id: str, is_correct: bool, user_answer: str) -> None:
     session = sessions.get(session_id)

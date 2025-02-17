@@ -51,7 +51,6 @@ async def create_quiz_session( request: Request, db: SessionDep):
     primary_to_secondary = form.get("direction") == "primary_to_secondary"
     selected_groups = form.getlist("groups")  # Get selected groups if any
     session_id = session_manager.start_new_session(db, nb_questions, primary_to_secondary, selected_groups)
-    
     return RedirectResponse(f"/quiz/{session_id}/question", status_code=303)
 
 
@@ -125,23 +124,23 @@ def quiz_answer(request: Request, session_id: str, db: SessionDep):
     if not quiz_session:
         return RedirectResponse("/quiz", status_code=303)
     
-    previous_question = quiz_session["question_id"] - 1
-    last_word: Word = quiz_session["words"][previous_question]
-    last_answer = quiz_session["answers"][previous_question]
-    question = last_word.primary_text if quiz_session["primary_to_secondary"] else last_word.secondary_text
-    correct_answer = last_word.secondary_text if quiz_session["primary_to_secondary"] else last_word.primary_text
-    is_correct = quiz_session["is_correct"][-1]
+    question_id = quiz_session["question_id"] - 1
+    word: Word = quiz_session["words"][question_id]
+    answer = quiz_session["answers"][question_id]
+    question = word.primary_text if quiz_session["primary_to_secondary"] else word.secondary_text
+    correct_answer = word.secondary_text if quiz_session["primary_to_secondary"] else word.primary_text
+    is_correct = quiz_session["is_correct"][question_id]
     
     return templates.TemplateResponse(
         request=request,
         name="quiz/quiz_answer.html",
         context={
             "word": question,
-            "user_answer": last_answer,
+            "user_answer": answer,
             "correct_answer": correct_answer,
             "is_correct": is_correct,
-            "success_count": last_word.success_count,
-            "attempt_count": last_word.attempt_count,
+            "success_count": word.success_count,
+            "attempt_count": word.attempt_count,
         }
     )
 
