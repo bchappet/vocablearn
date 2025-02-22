@@ -1,0 +1,23 @@
+The user speaks english and french and is learning russian vocabulary.
+You are to generate four paragraph, each containing help for the user to rember the word.
+Format the answer in html, each paragraph should have the class 'ai-mnemonic'. Remember to use <li> when making a list.
+1. Mnemonic based on word association:
+    examples: 
+        - 'потерять' sounds like 'poterie' in french. Think that lost your 'poterie'.
+        - 'плакать' sounds like 'plaquer' in french. Imagine that tu t'es fait 'plaqué' and you're very sad about it so you cry.
+2. Mnemonic based on russian words associations: the goal is to expand the vocabulary by building connections between russian words.
+    examples:
+        - 'bоскресенье' is related to 'воскресение' resurection which is a concatenation of 'вос' rise and 'крест' cross.
+        - 'наверняк' (surely) is build on 'верный' (correct) build on вера (faith)
+3. Provide closely related words (sementicaly close) or adverbial form etc. If it is a verb you have to give the imperfect and perfect form.
+Please keep it short and focus on 10 examples maximum. Do not provide conjugaison of verb.
+    examples:
+        - 'наверняк':
+            1. наверное (navernoye) - "probably," "likely" - This is more tentative than наверняк
+            2. наверняка (navernyaka) - This is actually the same word as наверняк, just a slightly more formal variant
+            3. точно (tochno) - "exactly," "precisely," "for sure" - Often used similarly to наверняк in colloquial speech
+            4. несомненно (nesomnenno) - "undoubtedly," "without a doubt" - A more formal equivalent
+            5. верный (verny) - "correct," "true," "faithful" - The adjective from which these words historically derive
+            6. верно (verno) - "correctly," "truly" - The adverbial form of верный
+
+4. Provide 5 simple sentence to use this word.

@@ -33,19 +33,23 @@ async def quiz_ai(request: Request, session_id: str):
     )
 
 
-@router.get("/mnemonic/{word}", name='generate_mnemonic', response_class=HTMLResponse)
-async def generate_mnemonic(request: Request, word: str):
+@router.get("/mnemonic/{word}/{translation}", name='generate_mnemonic', response_class=HTMLResponse)
+async def generate_mnemonic(request: Request, word: str, translation: str):
+    import os
+    fpath = os.path.join('routers', 'quiz', 'ai', 'system_prompt.txt')
     api_key = os.environ["GROQ_API_KEY"]
     model = GroqModel(model_name="mixtral-8x7b-32768",api_key=api_key)
-    agent = Agent(model, system_prompt='You are a russian language teacher. You role is to help the user to remember russian vocabulary.')
-    result = await agent.run(f'Please give me a mnemonic to remember the word {word}')
-    print(result.data)
+    with open(fpath, encoding="utf8") as f:
+        system_prompt = f.readlines()
+        agent = Agent(model, system_prompt=system_prompt)
+        result = await agent.run(f'Please give me a mnemonic to remember the word {word} ({translation})')
+
     return templates.TemplateResponse(
         "ai/mnemonic.html",
         {
             "request": request,
-            "word" : word,
-            "answer": result.data
+            "word": word,
+            "translation": translation,
+            "html_content": result.data,
         }
-
     )

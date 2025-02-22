@@ -1,22 +1,21 @@
 {% extends "base.html" %}
 
-{% block title %}Quiz AI{% endblock %}
+{% block title %}Quiz AI mnemonic{% endblock %}
 
-{% block header %}Quiz AI{% endblock %}
+{% block header %}Quiz AI mnemonic{% endblock %}
 
 {% block content %}
 <div class="quiz-mnemonic">
-    <p>Get a mnemonic on : <strong>{{ word }}</strong></p>
+    <p>Get a mnemonic on : <strong>{{ word }} <-> {{ translation }}</strong></p>
 </div>
 
 <div class="quiz-mnemonic">
-    {{ answer }}
+    {{ html_content | safe }}
 </div>
 {% endblock %}
 
 {% block navigation %}
 <div class="navigation">
-    <a href="/quiz/{{request.path_params['session_id']}}/question" class="btn btn-primary">Next Question</a>
-    <a href="/quiz/{{request.path_params['session_id']}}/summary" class="btn btn-secondary">End Quiz</a>
+    <button onclick="history.back()" class="btn btn-primary">Go Back</button>
 </div>
 {% endblock %}
