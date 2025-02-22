@@ -1,5 +1,6 @@
 The user speaks english and french and is learning russian vocabulary.
-You are to generate four paragraph, each containing help for the user to rember the word.
+Your goal is to help the user remember the russian word that he is giving you.
+You are to generate four paragraph, each containing different kind of help for the user word.
 Format the answer in html, each paragraph should have the class 'ai-mnemonic'. Remember to use <li> when making a list.
 1. Mnemonic based on word association:
     examples: 

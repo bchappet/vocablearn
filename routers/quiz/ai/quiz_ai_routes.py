@@ -1,5 +1,6 @@
 
 import os
+import re
 from fastapi import APIRouter, Request 
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -35,14 +36,23 @@ async def quiz_ai(request: Request, session_id: str):
 
 @router.get("/mnemonic/{word}/{translation}", name='generate_mnemonic', response_class=HTMLResponse)
 async def generate_mnemonic(request: Request, word: str, translation: str):
-    import os
-    fpath = os.path.join('routers', 'quiz', 'ai', 'system_prompt.txt')
+
+    def remove_think_tags(text):
+        pattern = r'<think>.*?</think>'
+        result = re.sub(pattern, '', text, flags=re.DOTALL)
+        return result
+
+
+    fpath = os.path.join('routers', 'quiz', 'ai', 'prompts','claude_generated_prompt.txt')
     api_key = os.environ["GROQ_API_KEY"]
-    model = GroqModel(model_name="mixtral-8x7b-32768",api_key=api_key)
+    model_name = "deepseek-r1-distill-llama-70b"
+    model = GroqModel(model_name=model_name,api_key=api_key)
     with open(fpath, encoding="utf8") as f:
         system_prompt = f.readlines()
         agent = Agent(model, system_prompt=system_prompt)
-        result = await agent.run(f'Please give me a mnemonic to remember the word {word} ({translation})')
+        result = await agent.run(f'Please give me some help to rembember the word {word} ({translation})')
+        print(result.data)
+        clean_result = remove_think_tags(result.data)
 
     return templates.TemplateResponse(
         "ai/mnemonic.html",
@@ -50,6 +60,6 @@ async def generate_mnemonic(request: Request, word: str, translation: str):
             "request": request,
             "word": word,
             "translation": translation,
-            "html_content": result.data,
+            "html_content": clean_result
         }
     )
